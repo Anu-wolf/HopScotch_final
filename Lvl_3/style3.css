@@ -1,0 +1,569 @@
+.square{
+    width: 5rem;
+    height: 5rem;
+}
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.start-button{
+  position: fixed;
+  top: 40%;
+  left: 40%;
+  background-color: #a57be0;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 35px;
+  text-align: center;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 1;
+  display: block;
+  z-index: 100000;
+  animation: buttonScale 1s infinite alternate
+}
+.start-button:hover {
+  background-color: #c75ded;
+  cursor: pointer;
+}
+.timer-container {
+  position: fixed;
+  top: 70px;
+  right: 600px;
+  width: 100px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px ;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+}
+
+.timer-label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  
+}
+
+.timer {
+  padding: 10px 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.rb-notif{
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.1); /* Use your desired color */
+  color: #ffffff; /* Use a contrasting color for text */
+  font-size: 24px;
+  padding: 12px 24px;
+  margin: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  animation: buttonScale 1s infinite alternate;
+
+}
+.Retry{
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #a57be0;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 35px;
+  text-align: center;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.Retry:hover {
+  background-color: #c75ded;
+  cursor: pointer;
+}
+.inst{
+    font-size: large;
+    position: relative;
+    top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+}
+.inst.show{
+  opacity: 1;
+}
+.rb-notif:hover {
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.5); /* Use a slightly different color on hover */
+  animation: buttonBounce 0.5s;
+}
+.retry_lvl{
+position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  opacity: 0;
+  transition: opacity  ease-in-out;
+  z-index: 10000;
+}
+.retry_lvl.show{
+  opacity: 1;
+}
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #eee;
+  color: #111;
+  
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  width: 100%;
+  background-image: linear-gradient(to right,#859398, #859398);
+  background-repeat: none;
+}
+
+.draggable-elements {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  
+  margin: 3rem;
+  position: relative;
+  top: 90px;
+  
+}
+.droppable-elements{
+  position: relative;
+top: 120px;
+left: 600px;
+display: flex;
+flex-wrap: wrap;
+min-width: 100px;
+flex-direction: row;
+align-items: center;
+
+}
+
+.droppable {
+  position: relative;
+  height: 5.5rem;
+  width: 5.5rem;
+  margin: 1rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 4rem;
+  font-weight: bold;
+  background-color: #fff;
+  border: 3px dashed #111;
+  border-radius: 7px;
+  transition: border-width 0.2s, transform 0.2s, background-color 0.4s;
+}
+
+.draggable {
+  height: 5rem;
+  width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  margin: 0rem 0.5rem;
+  cursor: move;
+  transition: opacity 0.2s;
+  border-radius: 7px;
+  margin: 2px;
+}
+.draggable:hover {
+  opacity: 0.5;
+}
+
+.droppable span {
+  font-size: 1.25rem;
+  pointer-events: none; /* The element is never the target of pointer events */
+}
+
+/* Drag and Drop Related Styling */
+
+.droppable.droppable-hover {
+  /* background-color: #bee3f0; */
+  border-width: 3px;
+  transform: scale(1.1) 2s;
+  
+}
+.droppable.dropped {
+  border-style: solid;
+  color: #fff;
+}
+.droppable.dropped span {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+.droppable.dropped div {
+  pointer-events: none;
+}
+.draggable.dragged {
+  user-select: none;
+  opacity: 0.1;
+  cursor: default;
+}
+.draggable.dragged:hover {
+  opacity: 0.1;
+}
+
+@media (max-width: 600px) {
+  html { font-size: 14px; }
+  .draggable-elements { margin: 1.5rem; }
+  
+  
+}
+
+.one{
+  position: relative;
+  
+}
+.two{
+  position: relative;
+  left: -30px;
+}
+.three{
+  position: relative;
+  left: -60px;
+ 
+}
+.four{
+  position: relative;
+  left: -90px;
+  bottom: 40px;
+  
+}
+
+.five{
+  position: relative;
+  left: -210px;
+  bottom: -49px;
+  
+}
+.six{
+  position: relative;
+  left: -240px;
+  
+}
+.seven{
+  position: relative;
+  left: -270px;
+  bottom: 40px;
+ 
+}
+.eight{
+  position: relative;
+  left: -390px;
+  bottom: -49px;
+ 
+}
+.nine{
+  position: relative;
+  bottom: 397px;
+  left: 36%;
+}
+.ten{
+  position: relative;
+  bottom: 414px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: none;
+}
+
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ccc;
+  border: 1px solid #ccc;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 10000;
+}
+
+.notification.show {
+  opacity: 1;
+}
+
+.winning-count-bar {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 10px;
+  background-color: transparent;
+  text-align: right;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  background-color: #ccc;
+  border-radius: 20px;
+}
+
+.energy-bar {
+  width: 160px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.energy-fill {
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.5s ease-in-out;
+}
+.counters {
+  margin-top: 10px;
+}
+
+.correct-count .count {
+  color: #4caf50;
+}
+
+.wrong-count .count {
+  color: #f44336;
+}
+
+.congratulations {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #a57be0;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 35px;
+  text-align: center;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.congratulations::before {
+  padding:20px;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 68px;
+  display: block;
+  margin-bottom: 10px;
+  margin: 10px;
+}
+
+.congratulations:hover {
+  background-color: #c75ded;
+  cursor: pointer;
+}
+
+.play-button {
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.1); /* Use your desired color */
+  color: #ffffff; /* Use a contrasting color for text */
+  font-size: 24px;
+  padding: 12px 24px;
+  margin: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  animation: buttonScale 1s infinite alternate;
+
+}
+
+.play-button:hover {
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.5); /* Use a slightly different color on hover */
+  animation: buttonBounce 0.5s;
+}
+.rb-notif:hover {
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.5); /* Use a slightly different color on hover */
+  animation: buttonBounce 0.5s;
+}
+
+@keyframes buttonScale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes buttonBounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* the following @media stylings are to make the tiles responsive for different screen size */
+
+@media only screen and (max-width: 1400px) {
+  
+  
+  .droppable-elements{left:400px;}
+}
+
+@media only screen and (max-width: 1300px) {
+  
+  
+  .droppable-elements{left:400px;}
+}
+@media only screen and (max-width: 1200px) {
+  
+  
+  .droppable-elements{left:400px;}
+}
+@media only screen and (max-width: 1100px) {
+  
+  
+  .droppable-elements{left:400px;}
+}
+@media only screen and (max-width: 970px) {
+  
+  .eight{
+    position: relative;
+    left:-390px;
+    bottom: -50px;
+   
+  }
+  .droppable-elements{left:00px;}
+}
+
+@media only screen and (max-width: 840px) {
+  .droppable-elements{
+    flex-direction: row;
+    align-items: center;
+  }
+  .four{
+    position: relative;
+    left: -90px;
+    bottom: 40px;
+    
+  }
+  
+  .five{
+    position: relative;
+    left: -210px;
+    bottom: -48px;
+    
+  }
+  .six{
+    position: relative;
+    left: -240px;
+    
+  }
+  .seven{
+    position: relative;
+    left: 450px;
+    bottom: 160px;
+   
+  }
+  .eight{
+    position: relative;
+    left: 330px;
+    bottom: 72px;
+   
+  }
+}
+@media only screen and (max-width: 720px) {
+  .droppable-elements{
+    flex-direction: row;
+    align-items: center;
+  }
+  .six{
+    position: relative;
+    left: 360px;
+    bottom: 120px;
+    
+  }
+  .seven{
+    position: relative;
+    left: 330px;
+    bottom: 160px;
+   
+  }
+  .eight{
+    position: relative;
+    left: 210px;
+    bottom: 72px;
+   
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  
+  .droppable-elements{
+    flex-direction: column;
+    align-items: center;
+  }
+  .two{
+    position: relative;
+    bottom: 30px;
+    left: 0px;
+  }
+  .three{
+    position: relative;
+    left: 0px;
+    bottom: 60px;
+   
+  }
+  .four{
+    position: relative;
+    left: 40px;
+    bottom:85px;
+    
+  }
+  
+  .five{
+    position: relative;
+    left: -40px;
+    bottom: 190px;
+    
+  }
+  .six{
+    position: relative;
+    left: 0px;
+    bottom: 215px;
+    
+  }
+  .seven{
+    position: relative;
+    left: 40px;
+    bottom: 240px;
+   
+  }
+  .eight{
+    position: relative;
+    left: -40px;
+    bottom: 345px;
+   
+  }
+}

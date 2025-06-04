@@ -1,0 +1,466 @@
+
+body{
+    display: flex;/*block*/
+    flex-direction:column;
+    align-items: center;
+    margin: 0;
+  }
+    .container{
+      margin-top: 120px;
+      position: relative;
+      top: 120px;
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      z-index: 1;
+    }
+    #buttonContainer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+        background-color: #6a6565;
+        min-height: 100px;
+        min-width: 250px;
+        height: fit-content;
+        max-height: 700px;
+        max-width: 250px;
+        justify-content: space-around;
+        align-items: flex-start;
+      
+      }
+      .name-place{
+        border: 2.5px ;
+        min-height: 250px;
+        min-width: 100px;
+        height: fit-content;
+        width: fit-content;
+        padding: 0px;
+        position: relative;
+        left: 80px;
+        top: 28px;
+      }
+      .no{
+        width: 110px;
+        height: 40px;
+        user-select: none
+      }
+      .last{
+        width: 125px;
+        height: 40px;
+        user-select: none
+      }
+      
+      #destinationContainer {
+        border: 2.5px solid #4d4646;
+        height: 280px;
+        width: 250px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+        position: relative;
+        left: 85px;
+      }
+      
+      button {
+        width: 100px;
+        height: 40px;
+        background-color: #c3b8bf;
+        border: none;
+        border-radius: 4px;
+        cursor: move;
+        user-select: none;
+      }
+      
+      button:active {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+      #checkButton{
+        position: relative;
+        top: 320px;
+        right: 300px;
+        margin-right: 10px;
+      }
+      #resetButton{
+        position: relative;
+        top: 320px;
+        right: 300px;
+        margin-right: 10px;
+      }
+      #runButton{
+        position: relative;
+        top: 320px;
+        right: 300px;
+        margin-right: 10px;
+      }
+     
+      .game-container{
+        /*height: fit-content;*/
+        display: flex;
+        top: 80px;
+        flex-direction: column;
+        width: fit-content;
+        align-items: center;
+        position: relative;
+      }
+    
+      canvas {
+        border: 1px solid black;
+        align-items: center;
+        position: relative;
+        width: fit-content;
+        height: fit-content;
+        display: none;
+      }
+      .contain{
+      position: absolute;
+      top: 30px;
+      right: 50px;
+      z-index: 1;
+      /*margin-top: 30px;*/
+    
+      }
+      .stone {
+        width: 20px;
+        height: 20px;
+        background-color: gray;
+        position: relative;
+        top: -340px;
+        left: 190px;
+        transform: translate(-50%, -50%);
+        transition: transform 0.3s ease;
+        z-index: 10;
+      }
+      .droppable-elements{
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+    
+        }
+        img {
+          width: 400px;
+          height: 500px;
+          
+        display: block;
+        position: relative;
+        z-index: 1000;
+          }
+        
+        .droppable {
+          height: 5.5rem;
+          width: 5.5rem;
+          margin: 1rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          font-size: 4rem;
+          font-weight: bold;
+          background-color: #fff;
+          border: 3px solid #111;
+          border-radius: 7px;
+          transition: border-width 0.2s, transform 0.2s, background-color 0.4s;
+          transform: rotate(90deg);
+        }
+        .droppable span {
+            font-size: 1.25rem;
+            pointer-events: none; /* The element is never the target of pointer events */
+          }
+          .one{
+            position: relative;
+           
+          }
+          .two{
+            position: relative;
+            left: -32px;
+          }
+          .three{
+            position: relative;
+            left: -65px;
+          }
+          .four{
+            position: relative;
+            left: -97px;
+            bottom: 43px;
+          }
+          
+          .five{
+            position: relative;
+            left:-222px;
+            bottom: -50px;
+          }
+          .six{
+            position: relative;
+            left: -255px;
+          }
+          .seven{
+            position: relative;
+            bottom: 43px;
+            left:-288px
+          }
+          .eight{
+            position: relative;
+            bottom: -50px;
+            left: -414px;
+          }
+          #headingContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f2f2f2;
+            z-index: 999;
+            font-size: 24px;
+            font-weight: bold;
+
+          }
+          
+          #headingText {
+            font-size: 24px;
+            font-weight: bold;
+            animation: fade-in-out 2s ease-in-out infinite;
+          }
+          
+          @keyframes fade-in-out {
+            0% {
+              opacity: 0;
+            }
+            50% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+            }
+          }
+          
+    .nxtlvl{
+      align-items: center;
+      display: block;
+      height: 100px;
+      width: 100px;
+    }
+    
+    @media screen {
+      
+    }
+    .cjump{
+      transform: translateY(-50px);
+      transition-duration: 1s;
+    }
+    .character {
+        position: absolute;
+        top: 500px;
+        left: 155px;
+        size: 10px;
+        z-index: 1000000000
+      }
+      .icon-jump{
+        height: 60px;
+        width: 60px;
+        z-index: 1000000000;
+        display: block;
+      }
+      .icon-hop{
+        height: 60px;
+        width: 60px;
+        z-index: 1000000000;
+        display :none;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .overlay-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+      }
+      
+      .overlay-content button {
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      .overlay-content button:hover {
+        background-color: #0056b3;
+      }
+      #buttonContainer button[draggable="true"] {
+        cursor: grab;
+      }
+      #buttonContainer button[draggable="false"] {
+        cursor: no-drop;
+        opacity: 0.6;
+      }
+/*
+.button-wrapper{
+  display: none;
+  background: linear-gradient(to right, #d4edda, #c3e6cb);
+  animation: popFade 1.5s ease forwards, glow 2s ease-in-out infinite;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  background: #d4edda;
+  color: #155724;
+  font-size: 2rem;
+  padding: 1rem 4rem;
+  border-radius: 10px;
+  border: 2px solid #c3e6cb;
+  box-shadow: 0 0 10px rgba(0, 128, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.button-wrapper.show {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+  animation: none; /*popFade 1.5s ease forwards;*/
+
+
+/*
+@keyframes popFade {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  30% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  90% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+
+.confetti-button {
+  font-size: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px #28a745, 0 0 20px #28a745;
+  }
+  30% {
+    box-shadow: 0 0 20px #218838, 0 0 30px #218838;
+  }
+  50% {
+    box-shadow: 0 0 20px #218838, 0 0 30px #218838;
+  }
+}
+ 
+
+canvas.confetti-canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none;
+  z-index: 10000;
+}
+ */
+
+#correctButton {
+  position: fixed;
+  top: 60%;
+  /*left: 50%;*/
+  height: 100px;
+  width: 250px;
+  transform: translate(-50%, -50%) scale(1);
+  background-color: #28a745;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 2.75rem 2.5rem;
+  border: none;
+  border-radius: 30px;
+  z-index: 10001;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}
+#correctButton .icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+#correctButton .label {
+  line-height: 1;
+}
+#correctButton.show {
+  opacity: 1;
+  animation: bounceInOut 0.6s ease-out;
+  pointer-events: auto;
+}
+
+@keyframes bounceInOut {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+
+#correctButton.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: bounceInOut 0.6s ease-out;
+  pointer-events: auto;
+}
+.hidden{
+  display: none;
+}
+

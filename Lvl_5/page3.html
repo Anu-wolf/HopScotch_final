@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level 5</title>
+<style>
+/* styles.css */
+body {
+  height: 100vh;
+    margin: 0;
+    text-align: center;
+    background-color: #eee;
+    padding: 0;
+    background-image: linear-gradient(to right, #859398, #859398);
+    color: #111;
+    font-family: 'Montserrat', sans-serif;
+ 
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Adjusted to display elements vertically */
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: row; /* Adjusted to display elements horizontally */
+}
+
+.tile-container {
+  display: flex;
+  flex-wrap: wrap; /* Tiles wrap to the next line if there's not enough space */
+  justify-content: center;
+}
+
+.tile {
+  width: calc(100px - 10px); /* Adjusted width to include the border */
+  height: calc(100px - 10px); /* Adjusted height to include the border */
+  background-color: lightblue;
+  border: 1px solid #ccc;
+  margin: 5px; /* Add space between tiles */
+  cursor: pointer;
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center align text vertically */
+}
+
+.tile:nth-child(odd) {
+  background-color: lightblue; /* Alternate tile colors */
+}
+
+.dropzone-container {
+  display: flex;
+  justify-content: space-around; /* Evenly distribute drop zones */
+}
+
+.dropzone {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #aaa;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.dropzone span {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.message-box {
+  padding: 20px;
+  background-color: lightgreen;
+  display: none;
+  text-align: center; /* Center align the message */
+}
+
+.running-text {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="running-text" id="runningText">The current round being played is called $.</div>
+<div class="container" id="container">
+  <div class="right-panel">
+    <div class="tile-container" id="tileContainer"></div>
+  </div>
+  <div class="right-panel">
+    <div class="dropzone-container" id="dropzoneContainer">
+      <div class="dropzone" data-value="1"><span id="dropzoneText1">Next Round</span></div>
+      <div class="dropzone" data-value="2"><span id="dropzoneText2">Previous Round</span></div>
+    </div>
+  </div>
+</div>
+<div id="messageContainer" class="message-box">
+  <div id="messageBox">Congratulations! You arranged the tiles correctly!</div>
+</div>
+<script>
+const tileContainer = document.getElementById('tileContainer');
+const runningText = document.querySelector('.running-text');
+const dropzoneContainer = document.getElementById('dropzoneContainer');
+const messageContainer = document.getElementById('messageContainer');
+const messageBox = document.getElementById('messageBox');
+const dropzoneText1 = document.getElementById('dropzoneText1');
+const dropzoneText2 = document.getElementById('dropzoneText2');
+const tiles = [
+  '<div class="tile" draggable="true" data-value="3">$</div>',
+  '<div class="tile" draggable="true" data-value="2">$ - 1</div>',
+  '<div class="tile" draggable="true" data-value="1">$ + 1</div>',
+  '<div class="tile" draggable="true" data-value="4">$ + 2</div>'
+];
+
+// Display running text with words appearing one by one
+const words = runningText.textContent.split(' ');
+runningText.textContent = ''; // Clear the text content
+words.forEach((word, index) => {
+  setTimeout(() => {
+    runningText.textContent += word + ' ';
+    if (index === words.length - 1) {
+      // Show tiles after running text is fully displayed
+      setTimeout(() => {
+        tileContainer.innerHTML = tiles.join(''); // Append tiles
+
+        // Add event listeners for drag and drop
+        const draggableTiles = document.querySelectorAll('.tile');
+        const dropzones = document.querySelectorAll('.dropzone');
+
+        draggableTiles.forEach(tile => {
+          tile.addEventListener('dragstart', dragStart);
+        });
+
+        dropzones.forEach(dropzone => {
+          dropzone.addEventListener('dragover', dragOver);
+          dropzone.addEventListener('drop', dragDrop);
+        });
+      }, 0); // No delay needed
+    }
+  }, index * 10); // Display each word with a small delay
+});
+
+let draggedTile = null;
+
+function dragStart(e) {
+  draggedTile = this;
+  e.dataTransfer.setData('text', this.dataset.value);
+}
+
+function dragOver(e) {
+  e.preventDefault();
+}
+
+function dragDrop(e) {
+  e.preventDefault();
+  const data = e.dataTransfer.getData('text');
+  if (data === this.dataset.value) {
+    this.appendChild(draggedTile);
+    if (this.dataset.value === "1") {
+      dropzoneText1.style.display = 'none'; // Hide text inside drop zone 1
+    } else if (this.dataset.value === "2") {
+      dropzoneText2.style.display = 'none'; // Hide text inside drop zone 2
+    }
+    checkTiles(); // Check if all tiles are placed correctly
+  }
+}
+
+function checkTiles() {
+  const dropzones = document.querySelectorAll('.dropzone');
+  let correctMatches = 0;
+  dropzones.forEach(dropzone => {
+    const tile = dropzone.querySelector('.tile');
+    if (tile && tile.dataset.value === dropzone.dataset.value) {
+      correctMatches++;
+    }
+  });
+
+  if (correctMatches === dropzones.length) {
+    messageContainer.style.display = 'block'; // Show congratulatory message
+  }
+}
+</script>
+</body>
+</html>

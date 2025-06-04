@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="style4.css">
+    <title>Document</title>
+</head>
+<body>
+  <!-- Instruction section with a start button -->
+  <div class="inst">
+    <button id="startButton" class="start-button">Start Game</button>
+    Arrange in descending order within 25 seconds!!
+  </div>
+
+  <!-- Timer display section -->
+  <div class="timer-container">
+    <div class="timer-label">Time Left:</div>
+    <div class="timer">25</div>
+  </div>
+
+  <!-- Section for draggable elements -->
+  <div class="draggable-elements">
+    <!-- Individual draggable elements with unique IDs and colors -->
+    <div class="draggable" style="color: rgb(255, 255, 255); background-color:rgb(92, 20, 143);" id="two" draggable="true">2</div>
+    <div class="draggable" style="color: rgb(255, 255, 255); background-color:rgb(248, 26, 26);" id="seven" draggable="true">7</div>
+    <div class="draggable" style="color: rgb(255, 255, 255); background-color:rgb(90, 90, 243)" id="three" draggable="true">3</div>
+    <div class="draggable" style="color: rgb(254, 254, 254); background-color:rgb(248, 168, 21);" id="six" draggable="true">6</div>
+    <div class="draggable" style="color: rgb(255, 255, 255); background-color:rgb(226, 43, 125);" id="eight" draggable="true">8</div>
+    <div class="draggable" style="color: rgb(255, 255, 255); background-color:rgb(5, 174, 5)" id="four" draggable="true">4</div>
+    <div class="draggable" style="color: rgb(254, 254, 254); background-color:violet;" id="one" draggable="true">1</div>
+    <div class="draggable" style="color: rgb(255, 255, 255); background-color:rgb(225, 225, 81);" id="five" draggable="true">5</div>
+    
+    <!-- Additional elements commented out for now -->
+    <!-- <div class="square draggable" style="color: rgb(255, 255, 255); background-color:rgb(226, 43, 223);" id="nine" draggable="true">9</div>
+    <div class="square draggable" style="color: rgb(255, 255, 255); background-color:rgb(226, 223, 43);" id="ten" draggable="true">10</div> -->
+  </div>
+
+  <!-- Section for droppable elements -->
+  <div class="droppable-elements">
+    <!-- Individual droppable elements with unique data-draggable-id attributes -->
+    <div class="droppable one" data-draggable-id="one"><span>one</span></div>
+    <div class="droppable two" data-draggable-id="two"><span>two</span></div>
+    <div class="droppable three" data-draggable-id="three"><span>three</span></div>
+    <div class="droppable four" data-draggable-id="four"><span>four</span></div>
+    <div class="droppable five" data-draggable-id="five"><span>five</span></div>
+    <div class="droppable six" data-draggable-id="six"><span>six</span></div>
+    <div class="droppable seven" data-draggable-id="seven"><span>seven</span></div>
+    <div class="droppable eight" data-draggable-id="eight"><span>eight</span></div>
+    
+    <!-- Additional elements commented out for now -->
+    <!-- <div class="droppable nine" data-draggable-id="nine"><span>nine</span></div>
+    <div class="droppable ten" data-draggable-id="ten"><span>ten</span></div> -->
+  </div>
+
+  <!-- Overlay for notifications and retry messages -->
+  <div class="overlay"></div>
+  <div class="notification"></div>
+  <div class="retry_lvl"></div>
+
+  <!-- Winning count bar section with energy fill and counters -->
+  <div class="winning-count-bar">
+    <div class="energy-bar">
+      <div class="energy-fill"></div>
+    </div>
+    <div class="counters">
+      <div class="correct-count">
+        <span class="label">Correct:</span>
+        <span class="count">0</span>
+      </div>
+      <div class="wrong-count">
+        <span class="label">Wrong:</span>
+        <span class="count">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Link to external JavaScript file -->
+  <script src="script4.js"></script>
+</body>
+</html>

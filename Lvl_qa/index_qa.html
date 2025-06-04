@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 3</title>
+    <style>
+body {
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    background-color: #eee;
+    padding: 0;
+    background-image: linear-gradient(to right, #859398, #859398);
+    color: #111;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#image-container,
+#quiz-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100vh;
+    margin-right: auto; /* Set right margin to auto to fill the remaining space */
+}
+
+#quiz-container {
+    align-items: center; /* Align items to the center */
+    margin-left: auto; /* Add this to push the quiz container to the right */
+}
+
+
+#quiz-container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            margin: 0 10px 10px 0;
+        }
+
+        #result-container {
+            margin-top: 20px;
+        }
+
+        .feedback {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div align="left" id="image-container">
+        <img align="left" id="selected-image" src="" alt="Randomly Selected Image">
+    </div>
+
+    <div id="quiz-container">
+        <div class="question" id="question1"></div>
+        <div class="options" id="options1"></div>
+
+        <div class="question" id="question2"></div>
+        <div class="options" id="options2"></div>
+
+        <div class="question" id="question3"></div>
+        <div class="options" id="options3"></div>
+
+        <div class="question" id="question4"></div>
+        <div class="options" id="options4"></div>
+
+        <button onclick="submitQuiz()">Submit</button>
+
+        <div id="result-container"></div>
+        <!-- Add more questions and options as needed -->
+    </div>
+
+    <script>
+        var imageData, randomIndex;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Function to initialize the quiz
+            function initializeQuiz() {
+                // Array of image URLs and corresponding questions with options
+                imageData = [
+                    {
+                        image: "image1.png",
+                        questions: [
+                            {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["4", "8", "3", "1"],
+                                correctAnswer: "1"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["6", "7", "5", "2"],
+                                correctAnswer: "2"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Pink", "Blue", "Green"],
+                                correctAnswer: "Pink"
+                            }
+                        ]
+                    },
+                    {
+                        image: "image2.png",
+                        questions: [
+                        {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["4", "8", "3", "2"],
+                                correctAnswer: "2"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["6", "3", "5", "2"],
+                                correctAnswer: "3"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Purple", "Blue", "Green"],
+                                correctAnswer: "Purple"
+                            }
+                        ]
+                    },
+                    {
+                        image: "image3.png",
+                        questions: [
+                        {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["4", "8", "3", "2"],
+                                correctAnswer: "3"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["4", "3", "5", "2"],
+                                correctAnswer: "4"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Purple", "Blue", "Green"],
+                                correctAnswer: "Blue"
+                            }
+                        ]
+                    }, {
+                        image: "image4.png",
+                        questions: [
+                        {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["4", "8", "3", "2"],
+                                correctAnswer: "4"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["6", "3", "5", "2"],
+                                correctAnswer: "5"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Purple", "Blue", "Green"],
+                                correctAnswer: "Green"
+                            }
+                        ]
+                    }, {
+                        image: "image5.png",
+                        questions: [
+                        {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["4", "8", "5", "2"],
+                                correctAnswer: "5"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["6", "3", "5", "2"],
+                                correctAnswer: "6"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Purple", "Blue", "Green"],
+                                correctAnswer: "Yellow"
+                            }
+                        ]
+                    }, {
+                        image: "image6.png",
+                        questions: [
+                        {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["4", "6", "3", "2"],
+                                correctAnswer: "6"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["6", "7", "5", "2"],
+                                correctAnswer: "7"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Pink", "Blue", "Green"],
+                                correctAnswer: "Pink"
+                            }
+                        ]
+                    }, {
+                        image: "image7.png",
+                        questions: [
+                        {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["7", "8", "3", "2"],
+                                correctAnswer: "7"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["6", "3", "5", "8"],
+                                correctAnswer: "8"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Purple", "Blue", "Red"],
+                                correctAnswer: "Red"
+                            }
+                        ]
+                    }, {
+                        image: "image8.png",
+                        questions: [
+                        {
+                                questionText: "What is the number of round being played right now?",
+                                options: ["4", "8", "3", "2"],
+                                correctAnswer: "8"
+                            },
+                            {
+                                questionText: "What will be the next round number?",
+                                options: ["6", "3", "5", "Not Applicable"],
+                                correctAnswer: "Not Applicable"
+                            },
+                            {
+                                questionText: "If the round currently being played is called $ when $<8, what will be the next round?",
+                                options: ["$", "$+2", "$+1", "$-1"],
+                                correctAnswer: "$+1"
+                            },
+                            {
+                                questionText: "What is the color of the tile?",
+                                options: ["Yellow", "Pink", "Blue", "Green"],
+                                correctAnswer: "Pink"
+                            }
+                        ]
+                    },
+                    // Add more image data as needed
+                ];
+
+                // Randomly select an index from the array
+                randomIndex = Math.floor(Math.random() * imageData.length);
+
+                // Get the image container and set the selected image source
+                var imageContainer = document.getElementById("selected-image");
+                imageContainer.src = imageData[randomIndex].image;
+
+                // Show the quiz container
+                var quizContainer = document.getElementById("quiz-container");
+                quizContainer.style.display = "block";
+
+                // Populate questions and options based on the selected image
+                var questions = imageData[randomIndex].questions;
+                for (var i = 0; i < questions.length; i++) {
+                    var questionElement = document.getElementById("question" + (i + 1));
+                    var optionsContainer = document.getElementById("options" + (i + 1));
+
+                    questionElement.textContent = questions[i].questionText;
+
+                    for (var j = 0; j < questions[i].options.length; j++) {
+                        var optionLabel = document.createElement("label");
+                        optionLabel.className = "option";
+                        optionLabel.textContent = questions[i].options[j];
+
+                        var radioButton = document.createElement("input");
+                        radioButton.type = "radio";
+                        radioButton.name = "question" + (i + 1);
+                        radioButton.value = questions[i].options[j];
+
+                        optionLabel.appendChild(radioButton);
+                        optionsContainer.appendChild(optionLabel);
+                    }
+                }
+            }
+
+            // Initialize the quiz
+            initializeQuiz();
+        });
+
+        function submitQuiz() {
+            var questions = document.querySelectorAll(".question");
+            var correctAnswers = 0;
+            var wrongAnswers = 0;
+
+            for (var i = 0; i < questions.length; i++) {
+                var selectedOption = document.querySelector('input[name="question' + (i + 1) + '"]:checked');
+                if (selectedOption) {
+                    var selectedAnswer = selectedOption.value;
+                    var correctAnswer = imageData[randomIndex].questions[i].correctAnswer;
+
+                    var feedback = document.createElement("p");
+                    feedback.className = "feedback";
+
+                    if (selectedAnswer === correctAnswer) {
+                        correctAnswers++;
+                        feedback.textContent = "✔ Correct!";
+                        feedback.style.color = "green";
+                    } else {
+                        wrongAnswers++;
+                        feedback.textContent = "❌ Wrong! Correct Answer: " + correctAnswer;
+                        feedback.style.color = "red";
+                    }
+
+                    questions[i].appendChild(feedback);
+                }
+            }
+
+            // Display the result
+            var resultContainer = document.getElementById("result-container");
+            resultContainer.innerHTML = "<p>Correct Answers: " + correctAnswers + "</p>";
+            resultContainer.innerHTML += "<p>Wrong Answers: " + wrongAnswers + "</p>";
+
+            // Disable the submit button after submission
+            var submitButton = document.querySelector("button[onclick='submitQuiz()']");
+            submitButton.disabled = true;
+        }
+    </script>
+</body>
+</html>

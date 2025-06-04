@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 6_2
+    
+  </title>
+  <style>
+     body {height: 100vh;
+    margin: 0;
+    text-align: center;
+    background-color: #eee;
+    padding: 0;
+    background-image: linear-gradient(to right, #859398, #859398);
+    color: #111;
+    font-family: 'Montserrat', sans-serif;
+  font-size: x-large;}
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center items horizontally */
+    }
+
+    .box {
+      width: 120px;
+      height: 120px;
+      background-color: lightblue;
+      cursor: pointer;
+      font-size: 18px;
+      margin-bottom: 5px;
+      line-height: 120px; /* Center the number vertically */
+      text-align: center; /* Center the number horizontally */
+    }
+    #optionsForm {
+      display: flex;
+    }
+
+    .optionLabel {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 90px;
+    }
+
+    .boxLabel {
+      margin-left: 10px;
+      display: flex;
+    }
+
+    .message {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="box" class="box" onclick="toggleNumber()">Click to reveal</div><br><br>
+    <div>If the current round number is in the box, what would have been the previous round number?</div><br><br>
+    <form id="optionsForm">
+      <label for="increaseOption" class="optionLabel">
+        <input type="radio" id="increaseOption" name="nextRoundOption" value="Increase by 1">
+        <div class="box" style="background-color: lightblue;">&nbsp;</div><span class="boxLabel">+ 1</span>
+      </label>
+      
+      <label for="remainOption" class="optionLabel">
+        <input type="radio" id="remainOption" name="nextRoundOption" value="Remain the same">
+        <div class="box" style="background-color: lightblue;">&nbsp;</div><span class="boxLabel">&nbsp;</span>
+      </label>
+      
+      <label for="decreaseOption" class="optionLabel">
+        <input type="radio" id="decreaseOption" name="nextRoundOption" value="Decrease by 1">
+        <div class="box" style="background-color: lightblue;">&nbsp;</div><span class="boxLabel">- 1</span>
+      </label>
+    </form><br><br>
+    <div id="message" class="message"></div>
+  </div>
+  
+  <script>
+    var randomNumber = Math.floor(Math.random() * 7) + 2;
+
+    function toggleNumber() {
+      var box = document.getElementById('box');
+      if (box.innerHTML === "Click to reveal") {
+        box.innerHTML = randomNumber;
+      } else {
+        box.innerHTML = "Click to reveal";
+      }
+    }
+
+    document.getElementById('optionsForm').addEventListener('change', function() {
+      var selectedOption = document.querySelector('input[name="nextRoundOption"]:checked').value;
+      var message = document.getElementById('message');
+      if (selectedOption === "Decrease by 1") {
+        message.textContent = "Success! The previous round number was " + (randomNumber - 1) + ".";
+      } else if (selectedOption === "Remain the same") {
+        message.textContent = "Failure! The previous round number was " + (randomNumber - 1) + ".";
+      } else if (selectedOption === "Increase by 1" && randomNumber > 1) {
+        message.textContent = "Failure! The previous round number was " + (randomNumber - 1) + ".";
+      } else {
+        message.textContent = "Failure! The previous round number was " + (randomNumber - 1) + ".";
+    }});
+  </script>
+</body>
+</html>

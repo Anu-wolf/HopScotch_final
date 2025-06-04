@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hopscotch Rounds</title>
+  <link rel="stylesheet" href="style_hop.css">
+  <style>
+    /*.round-section { display: none; }
+    .round-section.active { display: block; }*/
+    .toggle-btn { margin: 5px; padding: 10px 20px; cursor: pointer; background-color: #aaa; border-radius: 5px; border: none; }
+  </style>
+</head>
+<body>
+  <div id="headingContainer">
+    <div id="headingText">Round <span id="currentRound">1</span></div>
+  </div>
+  <button id="correctButton" class="hidden">
+    <span class ="icon">✅</span>
+    <span class ="label">Correct!</span>
+  </button>
+ 
+  <!--
+  <div id="correctMessage" class ="hidden">
+    ✓ Correct!
+  </div>
+  -->
+
+  <!--
+  <div style="margin: 1px;">
+    <button class="toggle-btn" onclick="switchRound(1)">Round 1</button>
+    <button class="toggle-btn" onclick="switchRound(2)">Round 2</button>
+    <button class="toggle-btn" onclick="switchRound(3)">Round 3</button>
+    <button class="toggle-btn" onclick="switchRound(4)">Round 4</button>
+    <button class="toggle-btn" onclick="switchRound(5)">Round 5</button>
+    <button class="toggle-btn" onclick="switchRound(6)">Round 6</button>
+    <button class="toggle-btn" onclick="switchRound(7)">Round 7</button>
+    <button class="toggle-btn" onclick="switchRound(8)">Round 8</button>
+  </div>
+  -->
+  
+  <div class="container">
+    <div id="buttonContainer"></div>
+    <div id="destinationContainer"></div>
+    <button id="runButton">Run</button>
+    <button id="resetButton">Reset</button>
+    <button id="checkButton">Check Order</button>
+  </div>
+
+  <div class="contain">
+    <div class="game-container">
+      <canvas id="canvas"></canvas>
+      <div id="character" class="character">
+        <img src="icons8-jumping-60.png" class="icon-jump" id="jump" alt="">
+        <img src="icons8-running-60.png" class="icon-hop" id="hop">
+      </div>
+      <section class="droppable-elements">
+        <img src="Picture1.png" alt="">
+      </section>
+    </div>
+  </div>
+
+  <script src="script_hop.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const round = parseInt(params.get("round")) || 1;//if no round then round1
+      switchRound(round);
+    });
+  </script>
+</body>
+</html>
+
+

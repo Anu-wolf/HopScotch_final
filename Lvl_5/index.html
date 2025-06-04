@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level 5</title>
+<style>
+/* styles.css */
+body {
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    background-color: #eee;
+    padding: 0;
+    background-image: linear-gradient(to right, #859398, #859398);
+    color: #111;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.left-panel {
+  margin-right: 20px;
+}
+
+.left-panel img {
+  margin-bottom: 20px;
+  width: 150px; /* Set the width to 200 pixels */
+  height: 350px; /* Set the height to 150 pixels */
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.tile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tile-row {
+  display: flex;
+  align-items: center;
+}
+
+.tile {
+  width: calc(100px - 10px); /* Adjusted width to include the border */
+  height: calc(100px - 10px); /* Adjusted height to include the border */
+  background-color: lightblue;
+  border: 1px solid #ccc;
+  margin: 5px; /* Add space between tiles */
+  cursor: pointer;
+  font-size: x-large;
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile:nth-child(odd) {
+  background-color: lightblue; /* Set the background color for all tiles */
+}
+
+.tile span {
+  width: 100%;
+  text-align: center;
+}
+
+.dropzone {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #aaa;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.dropzone span {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.message-box {
+  padding: 20px;
+  background-color: rgb(87, 216, 228);
+  display: none;
+  text-align: center; /* Center align the message */
+}
+
+.next-button {
+  padding: 10px 20px;
+  background-color: rgb(87, 216, 228);
+  border: none;
+  cursor: pointer;
+  display: none;
+}
+
+/* Resize images loaded dynamically */
+.resized-image {
+  width: 150px; /* Set the width to 200 pixels */
+  height: 350px; /* Set the height to 150 pixels */
+}
+
+/* Resize images to a percentage of their parent container */
+.img-container {
+  width: 50%; /* Set the container width */
+}
+
+.img-container img {
+  width: 100%; /* Make the image fill its container */
+  height: auto; /* Maintain aspect ratio */
+}
+
+#tileContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Center the message box */
+#messageContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999; /* Ensure it's above other elements */
+}
+
+/* Center the next button */
+#buttonContainer {
+  position: fixed;
+  top: calc(50% + 60px); /* Adjust the distance from the message box */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999; /* Ensure it's above other elements */
+}
+
+#dropZoneContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Resize images using max-width */
+.max-width-img {
+  max-width: 300px; /* Set the maximum width to 300 pixels */
+  height: auto; /* Maintain aspect ratio */
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="left-panel">
+    <img src="image1.png" alt="Image 1" class="resized-image">
+  </div>
+  <div class="right-panel">
+    <div class="tile-container">
+      <div class="tile-row">
+        <div class="tile" draggable="true" data-value="1">1</div>
+        <div class="tile" draggable="true" data-value="2">2</div>
+        <div class="tile" draggable="true" data-value="NA">Not Possible</div>
+      </div>
+      <div class="tile-row">
+        <div class="dropzone" data-value="1"><span>Current Round</span></div>
+        <div class="dropzone" data-value="2"><span>Next Round</span></div>
+        <div class="dropzone" data-value="NA"><span>Previous Round</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="left-panel">
+    <img id="image" src="image1.png" alt="Image">
+  </div>
+  <div class="right-panel">
+    <div class="tile-container" id="tileContainer">
+    </div>
+    <div class="tile-container" id="dropZoneContainer">
+    </div>
+  </div>
+</div>
+<div id="messageContainer" class="message-box">
+  <div id="messageBox">Congratulations! You arranged the tiles correctly!</div>
+</div>
+<div id="buttonContainer">
+  <button class="next-button" onclick="redirectToNextPage()">Next</button>
+</div>
+<script>
+// Define arrays containing the URLs of the three images
+const images = [
+  'image5.png', // Image 2
+  'image6.png', // Image 3
+  'image7.png'  // Image 4
+];
+
+// Randomly select an index from the array to determine which image to display
+const randomIndex = Math.floor(Math.random() * images.length);
+
+// Set the src attribute of the img element to the randomly chosen image URL
+const imageElement = document.getElementById('image');
+imageElement.src = images[randomIndex];
+
+// Define arrays containing sets of tiles for each image
+const tileSets = [
+  // Tiles for Image 5
+  [
+    { value: 4, text: '5' },
+    { value: 5, text: '6' },
+    { value: 6, text: '4' }
+  ],
+  // Tiles for Image 6
+  [
+    { value: 7, text: '7' },
+    { value: 8, text: '5' },
+    { value: 9, text: '6' }
+  ],
+  // Tiles for Image 7
+  [
+    { value: 10, text: '6' },
+    { value: 11, text: '8' },
+    { value: 12, text: '7' }
+  ]
+];
+
+// Define arrays containing sets of drop zones for each image
+const dropZoneSets = [
+  // Drop zones for Image 2
+  ['Current Round', 'Next Round', 'Previous Round'],
+  // Drop zones for Image 3
+  ['Next Round', 'Previous Round', 'Current Round'],
+  // Drop zones for Image 4
+  ['Previous Round', 'Next Round', 'Current Round']
+];
+
+// Select the corresponding tile set and drop zone set based on the random index
+const selectedTileSet = tileSets[randomIndex];
+const selectedDropZoneSet = dropZoneSets[randomIndex];
+
+// Populate the tile container with tiles
+const tileContainer = document.getElementById('tileContainer');
+selectedTileSet.forEach(tileData => {
+  const tile = document.createElement('div');
+  tile.classList.add('tile');
+  tile.textContent = tileData.text;
+  tile.setAttribute('draggable', true);
+  tile.setAttribute('data-value', tileData.value);
+  tileContainer.appendChild(tile);
+});
+
+// Populate the drop zone container with drop zones
+const dropZoneContainer = document.getElementById('dropZoneContainer');
+selectedDropZoneSet.forEach((dropZoneText, index) => {
+  const dropZone = document.createElement('div');
+  dropZone.classList.add('dropzone');
+  dropZone.setAttribute('data-value', selectedTileSet[index].value); // Assign corresponding tile value to drop zone
+  const span = document.createElement('span');
+  span.textContent = dropZoneText;
+  dropZone.appendChild(span);
+  dropZoneContainer.appendChild(dropZone);
+});
+
+function redirectToNextPage() {
+  // Redirect to the next page
+  window.location.href = "page2.html";
+}
+
+const tiles = document.querySelectorAll('.tile');
+const dropzones = document.querySelectorAll('.dropzone');
+const messageContainer = document.getElementById('messageContainer');
+const nextButton = document.querySelector('.next-button');
+
+let draggedTile = null;
+
+tiles.forEach(tile => {
+  tile.addEventListener('dragstart', dragStart);
+  tile.addEventListener('dragend', dragEnd);
+});
+
+dropzones.forEach(dropzone => {
+  dropzone.addEventListener('dragover', dragOver);
+  dropzone.addEventListener('dragenter', dragEnter);
+  dropzone.addEventListener('dragleave', dragLeave);
+  dropzone.addEventListener('drop', dragDrop);
+});
+
+function dragStart() {
+  draggedTile = this;
+  setTimeout(() => (this.style.display = 'none'), 0);
+}
+
+function dragEnd() {
+  draggedTile.style.display = 'block';
+  draggedTile = null;
+}
+
+function dragOver(e) {
+  e.preventDefault();
+}
+
+function dragEnter(e) {
+  e.preventDefault();
+  this.classList.add('hovered');
+}
+
+function dragLeave() {
+  this.classList.remove('hovered');
+}
+
+function dragDrop() {
+  this.classList.remove('hovered');
+  const currentDropzone = this;
+  const currentTileValue = draggedTile.getAttribute('data-value');
+  const currentDropzoneValue = currentDropzone.getAttribute('data-value');
+  if (currentTileValue === currentDropzoneValue) {
+    if (!currentDropzone.querySelector('.tile')) {
+      currentDropzone.appendChild(draggedTile);
+      currentDropzone.querySelector('span').style.display = 'none'; // Hide the text
+      checkTiles();
+    } else {
+      const replacedTile = currentDropzone.querySelector('.tile');
+      currentDropzone.removeChild(replacedTile);
+      currentDropzone.appendChild(draggedTile);
+      currentDropzone.querySelector('span').style.display = 'none'; // Hide the text
+      checkTiles();
+    }
+  }
+}
+
+function checkTiles() {
+  let correctMatches = 0;
+  dropzones.forEach(dropzone => {
+    const tile = dropzone.querySelector('.tile');
+    if (tile && tile.getAttribute('data-value') === dropzone.getAttribute('data-value')) {
+      correctMatches++;
+    }
+  });
+
+  if (correctMatches === dropzones.length) {
+    messageContainer.style.display = 'block'; // Show the message container
+    nextButton.style.display = 'block'; // Display the button
+  }
+}
+</script>
+</body>
+</html>
