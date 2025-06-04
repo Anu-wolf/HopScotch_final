@@ -1,4 +1,6 @@
 
+// === UPDATED script_hop.js ===
+
 class HopscotchGame {
   constructor(level, levelSequences) {
     this.levelSequences = levelSequences;
