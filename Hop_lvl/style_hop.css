@@ -480,10 +480,9 @@ canvas.confetti-canvas {
   border-left: 4px solid #fbc02d;
   border-radius: 4px;
   animation: fadeIn 0.4s ease;
-  max-width: 120px;
-  height: 38px;
-  /*line-height: 1.2;
-  white-space: nowrap; Force single line */
+  min-width: 140px;
+  line-height: 1.2;
+  /*white-space: nowrap; Force single line */
   word-break: break-word;
   min-height: 36px; /* fixes vertical alignment */
   overflow: hidden;
