@@ -474,10 +474,10 @@ canvas.confetti-canvas {
 .explanation-text {
   font-size: 13px;
   font-style: italic;
-  color:#4a3f35;
-  background-color: linear-gradient(to right, #fdf6e3, #f5e8c7);
+  color:#5e503f;
+  background-color: #fdf6e3;/*linear-gradient(to right, #fdf6e3, #f5e8c7);*/
   padding: 4px 8px;
-  border: 1.5px solid #d2b48c;
+  border: 1.5px solid #d4a373;
   border-radius: 10px;
   box-shadow: 1px 1px 5px rgba(210, 180, 140, 0.2);
   animation: floatIn 0.4s ease-out;
