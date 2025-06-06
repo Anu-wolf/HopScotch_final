@@ -92,19 +92,19 @@ class HopscotchGame {
     };
 
     const moveNext = () => {
-
-      // Fade/scale ALL previous buttons **and** their explanations
+// Fade all previous buttons only (explanations added later)
 Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
   const btn = wrap.querySelector('button');
-  const expl = wrap.querySelector('.explanation-text');
   if (idx < index) {
     btn && btn.classList.add('previous-step');
-    expl && expl.classList.add('previous-step');
   } else {
     btn && btn.classList.remove('previous-step');
-    expl && expl.classList.remove('previous-step');
   }
 });
+
+
+      // Fade/scale ALL previous buttons **and** their explanations
+
 
       }
 
@@ -138,6 +138,7 @@ Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
         msg.className = 'explanation-text';
         msg.innerText = explanations[action] || "Unknown step";
         wrapper.appendChild(msg);
+        msg.classList.add('previous-step');
         index++;
         setTimeout(moveNext, 1000);
       }, 1000);
