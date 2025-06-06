@@ -53,8 +53,8 @@ body{
       
       #destinationContainer {
         border: 2.5px solid #4d4646;
-        height: 320px;
-        width: 260px;
+        height: 280px;
+        width: 280px;
         padding: 10px;
         background-color: #f0f0f0;
         display: flex;
@@ -476,7 +476,7 @@ canvas.confetti-canvas {
   font-style: italic;
   color: #111;
   background-color: linear-gradient(to right, #fff8dc, #ffe4b5);
-  padding: 6px 10px;
+  padding: 4px 8px;
   border: 2px solid #ffa500;
   border-radius: 10px;
   box-shadow: 2px 2px 8px rgba(255, 165, 0, 0.2);
