@@ -481,11 +481,11 @@ canvas.confetti-canvas {
   border-radius: 10px;
   box-shadow: 2px 2px 8px rgba(255, 165, 0, 0.2);
   animation: floatIn 0.4s ease-out;
-  max-width: 140px;
+  min-width: 140px;
   line-height: 1.2;
   /*white-space: nowrap; Force single line */
   word-break: break-word;
-  min-height: 32px; /* fixes vertical alignment */
+  min-height: 36px; /* fixes vertical alignment */
   overflow: hidden;
   text-overflow: ellipsis;
   transition: all 0.3s ease;
