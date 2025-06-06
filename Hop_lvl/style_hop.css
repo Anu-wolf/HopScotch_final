@@ -475,9 +475,10 @@ canvas.confetti-canvas {
   font-size: 13px;
   font-style: italic;
   color: #333;
-  background-color: #fff9c4;
+  background-color: #f5b939;
   padding: 6px 10px;
-  border-left: 4px solid #fbc02d;
+  border-left: 4px solid red;
+  border: 1px solid red;
   border-radius: 4px;
   animation: fadeIn 0.4s ease;
   min-width: 140px;
