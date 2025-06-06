@@ -71,17 +71,11 @@ class HopscotchGame {
     });
     this.availableButtons = this.levelSequences[this.currentLevel];
     this.character.style.transform = `translateY(0px) translateX(0px)`;
-    // Remove fading classes
-    Array.from(document.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
-
   }
 
   moveCharacter(buttonSequence, callback) {
     let index = 0;
     this.character.style.transform = `translateY(0px) translateX(0px)`;
-    // Remove fading classes
-    Array.from(document.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
-
 
     const explanations = {
       'Hop': "Hop: A short leap forward.",
@@ -92,22 +86,6 @@ class HopscotchGame {
     };
 
     const moveNext = () => {
-// Fade all previous buttons only (explanations added later)
-Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
-  const btn = wrap.querySelector('button');
-  if (idx < index) {
-    btn && btn.classList.add('previous-step');
-  } else {
-    btn && btn.classList.remove('previous-step');
-  }
-});
-
-
-      // Fade/scale ALL previous buttons **and** their explanations
-
-
-      }
-
       if (index >= buttonSequence.length) {
         if (callback) callback();
         return;
@@ -138,7 +116,6 @@ Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
         msg.className = 'explanation-text';
         msg.innerText = explanations[action] || "Unknown step";
         wrapper.appendChild(msg);
-        msg.classList.add('previous-step');
         index++;
         setTimeout(moveNext, 1000);
       }, 1000);
@@ -157,9 +134,6 @@ Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
         alert('The order is not right or it is incomplete. Check the animation & use the reset button to try again !!');
       }
       this.character.style.transform = `translateY(0px) translateX(0px)`;
-    // Remove fading classes
-    Array.from(document.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
-
       this.xPosition = 0;
       this.yPosition = 0;
     });
