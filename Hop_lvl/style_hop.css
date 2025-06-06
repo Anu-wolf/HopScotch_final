@@ -493,3 +493,10 @@ canvas.confetti-canvas {
   from { opacity: 0; transform: translateX(-10px); }
   to { opacity: 1; transform: translateX(0); }
 }
+
+.previous-step {
+  opacity: 0.5;
+  transform: scale(0.8);
+  transition: all 0.5s ease;
+}
+

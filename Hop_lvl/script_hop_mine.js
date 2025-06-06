@@ -86,20 +86,6 @@ class HopscotchGame {
     };
 
     const moveNext = () => {
-
-      Array.from(this.destinationContainer.children).forEach(wrapper => {
-        const btn = wrapper.querySelector('button');
-        if (btn) btn.classList.remove('previous-step');
-      });
-
-      if (index > 0) {
-        const prevWrapper = this.destinationContainer.children[index - 1];
-        const prevBtn = prevWrapper.querySelector('button');
-        if (prevBtn) {
-          prevBtn.classList.add('previous-step');
-        }
-      }
-
       if (index >= buttonSequence.length) {
         if (callback) callback();
         return;
