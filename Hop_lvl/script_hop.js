@@ -71,11 +71,17 @@ class HopscotchGame {
     });
     this.availableButtons = this.levelSequences[this.currentLevel];
     this.character.style.transform = `translateY(0px) translateX(0px)`;
+    // Remove fading classes
+    Array.from(document.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
+
   }
 
   moveCharacter(buttonSequence, callback) {
     let index = 0;
     this.character.style.transform = `translateY(0px) translateX(0px)`;
+    // Remove fading classes
+    Array.from(document.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
+
 
     const explanations = {
       'Hop': "Hop: A short leap forward.",
@@ -87,17 +93,19 @@ class HopscotchGame {
 
     const moveNext = () => {
 
-      Array.from(this.destinationContainer.children).forEach(wrapper => {
-        const btn = wrapper.querySelector('button');
-        if (btn) btn.classList.remove('previous-step');
-      });
+      // Fade/scale ALL previous buttons **and** their explanations
+Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
+  const btn = wrap.querySelector('button');
+  const expl = wrap.querySelector('.explanation-text');
+  if (idx < index) {
+    btn && btn.classList.add('previous-step');
+    expl && expl.classList.add('previous-step');
+  } else {
+    btn && btn.classList.remove('previous-step');
+    expl && expl.classList.remove('previous-step');
+  }
+});
 
-      if (index > 0) {
-        const prevWrapper = this.destinationContainer.children[index - 1];
-        const prevBtn = prevWrapper.querySelector('button');
-        if (prevBtn) {
-          prevBtn.classList.add('previous-step');
-        }
       }
 
       if (index >= buttonSequence.length) {
@@ -148,6 +156,9 @@ class HopscotchGame {
         alert('The order is not right or it is incomplete. Check the animation & use the reset button to try again !!');
       }
       this.character.style.transform = `translateY(0px) translateX(0px)`;
+    // Remove fading classes
+    Array.from(document.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
+
       this.xPosition = 0;
       this.yPosition = 0;
     });
