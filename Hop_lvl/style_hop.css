@@ -54,7 +54,7 @@ body{
       #destinationContainer {
         border: 2.5px solid #4d4646;
         height: 280px;
-        width: 280px;
+        width: 300px;
         padding: 10px;
         background-color: #f0f0f0;
         display: flex;
@@ -472,7 +472,7 @@ canvas.confetti-canvas {
 }
 
 .explanation-text {
-  font-size: 12px;
+  font-size: 13px;
   font-style: italic;
   color: #111;
   background-color: linear-gradient(to right, #fff8dc, #ffe4b5);
