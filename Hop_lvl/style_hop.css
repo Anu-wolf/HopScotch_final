@@ -472,22 +472,23 @@ canvas.confetti-canvas {
 }
 
 .explanation-text {
-  font-size: 13px;
+  font-size: 12px;
   font-style: italic;
-  color: #333;
-  background-color: #f5b939;
+  color: #111;
+  background-color: linear-gradient(to right, #fff8dc, #ffe4b5);
   padding: 6px 10px;
-  border-left: 4px solid red;
-  border: 1px solid red;
-  border-radius: 4px;
-  animation: fadeIn 0.4s ease;
-  min-width: 140px;
+  border: 2px solid #ffa500;
+  border-radius: 10px;
+  box-shadow: 2px 2px 8px rgba(255, 165, 0, 0.2);
+  animation: floatIn 0.4s ease-out;
+  max-width: 140px;
   line-height: 1.2;
   /*white-space: nowrap; Force single line */
   word-break: break-word;
-  min-height: 36px; /* fixes vertical alignment */
+  min-height: 32px; /* fixes vertical alignment */
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: all 0.3s ease;
 }
 
 @keyframes fadeIn {
@@ -503,5 +504,19 @@ canvas.confetti-canvas {
 .explanation-text.previous-step{
   opacity: 0.25;
   transform: none;
+  background: #fdf6e3;
+  border: 1px dashed #ccc;
+  box-shadow: none;
+}
+/* Entrance animation */
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
