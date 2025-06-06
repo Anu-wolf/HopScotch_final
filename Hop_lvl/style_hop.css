@@ -474,12 +474,12 @@ canvas.confetti-canvas {
 .explanation-text {
   font-size: 13px;
   font-style: italic;
-  color: #111;
-  background-color: linear-gradient(to right, #fff8dc, #ffe4b5);
+  color:#4a3f35;
+  background-color: linear-gradient(to right, #fdf6e3, #f5e8c7);
   padding: 4px 8px;
-  border: 2px solid #ffa500;
+  border: 1.5px solid #d2b48c;
   border-radius: 10px;
-  box-shadow: 2px 2px 8px rgba(255, 165, 0, 0.2);
+  box-shadow: 1px 1px 5px rgba(210, 180, 140, 0.2);
   animation: floatIn 0.4s ease-out;
   min-width: 140px;
   line-height: 1.2;
@@ -502,10 +502,11 @@ canvas.confetti-canvas {
   transition: all 0.4s ease;
 }
 .explanation-text.previous-step{
-  opacity: 0.25;
+  opacity: 0.3;
   transform: none;
-  background: #fdf6e3;
-  border: 1px dashed #ccc;
+  background: #f5f0e6;
+  border: 1px dashed #c1a77d;
+  color: #7a6a58;
   box-shadow: none;
 }
 /* Entrance animation */
