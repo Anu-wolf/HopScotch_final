@@ -53,14 +53,14 @@ body{
       
       #destinationContainer {
         border: 2.5px solid #4d4646;
-        height: 280px;
-        width: 250px;
+        height: 450px;
+        width: 260px;
         padding: 10px;
         background-color: #f0f0f0;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        overflow-y: auto;
+        overflow-y: hidden; /*no scrollbar*/
         position: relative;
         left: 85px;
       }
