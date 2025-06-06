@@ -472,7 +472,7 @@ canvas.confetti-canvas {
 }
 
 .explanation-text {
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
   color:#5e503f;
   background-color: #fdf6e3;/*linear-gradient(to right, #fdf6e3, #f5e8c7);*/
