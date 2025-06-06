@@ -85,7 +85,21 @@ class HopscotchGame {
       'Skip-HopLeft': "Diagonal move to the left."
     };
 
+    // Remove any previous fades
+    Array.from(this.destinationContainer.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
+
     const moveNext = () => {
+      Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
+        const btn = wrap.querySelector('button');
+        const expl = wrap.querySelector('.explanation-text');
+        if (idx < index) {
+          btn && btn.classList.add('previous-step');
+          expl && expl.classList.add('previous-step');
+        }else{
+          btn && btn.classList.remove('previous-step');
+          expl && expl.classList.remove('previous-step');
+        }
+      });
       if (index >= buttonSequence.length) {
         if (callback) callback();
         return;
