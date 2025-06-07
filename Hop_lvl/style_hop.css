@@ -543,11 +543,16 @@ canvas.confetti-canvas {
   position: relative;
 }
 
-.top-controls,
-.bottom-controls {
+.top-controls{
   display: flex;
   gap: 15px;
 }
-
+.bottom-controls{
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
 
