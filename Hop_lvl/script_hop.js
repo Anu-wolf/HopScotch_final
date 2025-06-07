@@ -71,7 +71,6 @@ class HopscotchGame {
     });
     this.availableButtons = this.levelSequences[this.currentLevel];
     this.character.style.transform = `translateY(0px) translateX(0px)`;
-    document.getElementById('nextStepButton').style.display = 'none';
   }
 
   moveCharacter(buttonSequence, callback) {
@@ -146,7 +145,6 @@ class HopscotchGame {
     Array.from(this.destinationContainer.querySelectorAll('.explanation-text')).forEach(e => e.remove());
     moveNext();
     document.getElementById('nextStepButton').style.display = 'none';
-
   }
 
   checkSequence() {
@@ -161,7 +159,6 @@ class HopscotchGame {
       this.xPosition = 0;
       this.yPosition = 0;
     });
-    document.getElementById('nextStepButton').style.display = 'none';
   }
 
   runSequence() {
