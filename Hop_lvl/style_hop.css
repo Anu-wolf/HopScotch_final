@@ -534,8 +534,8 @@ canvas.confetti-canvas {
 }
 
 .controls {
-  top: 30px;
-  right: 30px;
+  top: 120px;
+  right: 190px;
   margin-right: 10px;
   display: flex;
   flex-direction: column;
