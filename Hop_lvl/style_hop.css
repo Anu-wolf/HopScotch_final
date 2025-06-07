@@ -6,11 +6,13 @@ body{
     margin: 0;
   }
     .container{
-      margin-top: 120px;
+      margin-top: 80px;
       position: relative;
       top: 120px;
       display: flex;
       flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
       gap: 20px;
       z-index: 1;
     }
@@ -62,7 +64,7 @@ body{
         gap: 10px;
         overflow-y: hidden; /*no scrollbar*/
         position: relative;
-        left: 85px;
+        left: 0;
       }
       
       button {
