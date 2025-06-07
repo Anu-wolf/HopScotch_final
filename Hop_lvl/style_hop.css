@@ -528,11 +528,12 @@ canvas.confetti-canvas {
   }
 }
 
-.controls {
+/*.controls {
   display: flex;
   justify-content: center;
   gap: 15px;
   margin-top: 40px;
 }
+  */
 
 
