@@ -14,7 +14,7 @@ body{
       justify-content: center;
       align-items: flex-start;
       gap: 40px;
-      left: -350px;
+      left: -300px;
       z-index: 1;
     }
     #buttonContainer {
@@ -534,6 +534,9 @@ canvas.confetti-canvas {
 }
 
 .controls {
+  top: 320px;
+  right: 300px;
+  margin-right: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
