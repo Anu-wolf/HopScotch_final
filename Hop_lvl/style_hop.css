@@ -78,7 +78,8 @@ body{
       button:active {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
       }
-      #checkButton{
+      #check
+      {
         position: relative;
         top: 320px;
         right: 300px;
