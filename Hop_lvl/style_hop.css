@@ -14,7 +14,7 @@ body{
       justify-content: center;
       align-items: flex-start;
       gap: 40px;
-      left: -350;
+      left: -350px;
       z-index: 1;
     }
     #buttonContainer {
