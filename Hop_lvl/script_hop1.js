@@ -88,13 +88,7 @@ class HopscotchGame {
     // Remove any previous fades
     Array.from(this.destinationContainer.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
 
-    
     const moveNext = () => {
-      // Hide the main buttons and show only next
-      this.runButton.style.display = 'none';
-      this.checkButton.style.display = 'none';
-      this.resetButton.style.display = 'none';
-    
       Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
         const btn = wrap.querySelector('button');
         const expl = wrap.querySelector('.explanation-text');
@@ -107,14 +101,7 @@ class HopscotchGame {
         }
       });
       if (index >= buttonSequence.length) {
-        
-        // Show main buttons again when done, hide next
-        this.runButton.style.display = 'inline-block';
-        this.checkButton.style.display = 'inline-block';
-        this.resetButton.style.display = 'inline-block';
-        document.getElementById('nextStepButton').style.display = 'none';
         if (callback) callback();
-    
         return;
       }
 
