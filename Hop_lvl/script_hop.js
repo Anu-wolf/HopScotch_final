@@ -90,40 +90,84 @@ class HopscotchGame {
 
     
     const moveNext = () => {
-      // Hide the main buttons and show only next
       this.runButton.style.display = 'none';
       this.checkButton.style.display = 'none';
       this.resetButton.style.display = 'none';
-    
-      Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
-        const btn = wrap.querySelector('button');
-        const expl = wrap.querySelector('.explanation-text');
-        if (idx < index) {
-          btn && btn.classList.add('previous-step');
-          expl && expl.classList.add('previous-step');
-        }else{
-          btn && btn.classList.remove('previous-step');
-          expl && expl.classList.remove('previous-step');
+
+      const nextBtn = document.getElementById('nextStepButton');
+      const prevBtn = document.getElementById('prevStepButton');
+      nextBtn.style.display = 'inline-block';
+      prevBtn.style.display = 'inline-block';
+
+      const explanations = {
+        'Hop': "Hop: A short leap forward.",
+        'Skip': "Skip: A longer skip forward.",
+        'Jump': "Jump: A high jump.",
+        'Skip-HopRight': "Diagonal move to the right.",
+        'Skip-HopLeft': "Diagonal move to the left."
+      };
+
+      const updateStep = () => {
+        Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
+          const btn = wrap.querySelector('button');
+          const expl = wrap.querySelector('.explanation-text');
+          if (idx < index) {
+            btn && btn.classList.add('previous-step');
+            expl && expl.classList.add('previous-step');
+          } else {
+            btn && btn.classList.remove('previous-step');
+            expl && expl.classList.remove('previous-step');
+          }
+        });
+
+        const action = buttonSequence[index];
+        let moveDistance = { y: 0, x: 0 };
+        switch (action) {
+          case 'Hop': moveDistance = { y: 80, x: 0 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
+          case 'Skip': moveDistance = { y: 150, x: 0 }; break;
+          case 'Jump': moveDistance = { y: 80, x: 0 }; this.hop.style.display = 'none'; this.jump.style.display = 'block'; break;
+          case 'Skip-HopRight': moveDistance = { y: 80, x: 32 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
+          case 'Skip-HopLeft': moveDistance = { y: 80, x: -32 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
         }
-      });
-      if (index >= buttonSequence.length) {
-        
-        // Show main buttons again when done, hide next
-        this.runButton.style.display = 'inline-block';
-        this.checkButton.style.display = 'inline-block';
-        this.resetButton.style.display = 'inline-block';
-        document.getElementById('nextStepButton').style.display = 'none';
-        if (callback) callback();
-    
-        return;
-      }
+        this.character.style.transform = `translateY(${-moveDistance.y * index}px) translateX(${moveDistance.x}px)`;
+      };
 
-      const action = buttonSequence[index];
-      const wrapper = this.destinationContainer.children[index];
-      let moveDistance;
+      const updateExplanation = () => {
+        Array.from(this.destinationContainer.querySelectorAll('.explanation-text')).forEach(e => e.remove());
+        const wrapper = this.destinationContainer.children[index];
+        const msg = document.createElement('div');
+        msg.className = 'explanation-text';
+        msg.innerText = explanations[buttonSequence[index]] || "Unknown step";
+        wrapper.appendChild(msg);
+      };
 
-      switch (action) {
-        case 'Hop': moveDistance = { y: 80, x: 0 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
+      nextBtn.onclick = () => {
+        if (index < buttonSequence.length - 1) {
+          index++;
+          updateStep();
+          updateExplanation();
+        } else {
+          nextBtn.style.display = 'none';
+          prevBtn.style.display = 'none';
+          this.runButton.style.display = 'inline-block';
+          this.checkButton.style.display = 'inline-block';
+          this.resetButton.style.display = 'inline-block';
+          if (callback) callback();
+        }
+      };
+
+      prevBtn.onclick = () => {
+        if (index > 0) {
+          index--;
+          updateStep();
+          updateExplanation();
+        }
+      };
+
+      updateStep();
+      updateExplanation();
+    };
+ this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
         case 'Skip': moveDistance = { y: 150, x: 0 }; break;
         case 'Jump': moveDistance = { y: 80, x: 0 }; this.hop.style.display = 'none'; this.jump.style.display = 'block'; break;
         case 'Skip-HopRight': moveDistance = { y: 80, x: 32 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
