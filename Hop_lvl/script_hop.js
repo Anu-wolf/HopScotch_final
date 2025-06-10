@@ -1,4 +1,3 @@
-
 class HopscotchGame {
   constructor(level, levelSequences) {
     this.levelSequences = levelSequences;
@@ -85,123 +84,105 @@ class HopscotchGame {
       'Skip-HopLeft': "Diagonal move to the left."
     };
 
+    // Hide all control buttons initially
+    this.runButton.style.display = 'none';
+    this.checkButton.style.display = 'none';
+    this.resetButton.style.display = 'none';
+    
+    // Show only the next button
+    const nextBtn = document.getElementById('nextStepButton');
+    const prevBtn = document.getElementById('prevStepButton');
+    nextBtn.style.display = 'inline-block';
+    prevBtn.style.display = 'none';
+
     // Remove any previous fades
     Array.from(this.destinationContainer.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
 
-    
-    const moveNext = () => {
-      this.runButton.style.display = 'none';
-      this.checkButton.style.display = 'none';
-      this.resetButton.style.display = 'none';
-
-      const nextBtn = document.getElementById('nextStepButton');
-      const prevBtn = document.getElementById('prevStepButton');
-      nextBtn.style.display = 'inline-block';
-      prevBtn.style.display = 'inline-block';
-
-      const explanations = {
-        'Hop': "Hop: A short leap forward.",
-        'Skip': "Skip: A longer skip forward.",
-        'Jump': "Jump: A high jump.",
-        'Skip-HopRight': "Diagonal move to the right.",
-        'Skip-HopLeft': "Diagonal move to the left."
-      };
-
-      const updateStep = () => {
-        Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
-          const btn = wrap.querySelector('button');
-          const expl = wrap.querySelector('.explanation-text');
-          if (idx < index) {
-            btn && btn.classList.add('previous-step');
-            expl && expl.classList.add('previous-step');
-          } else {
-            btn && btn.classList.remove('previous-step');
-            expl && expl.classList.remove('previous-step');
-          }
-        });
-
-        const action = buttonSequence[index];
-        let moveDistance = { y: 0, x: 0 };
-        switch (action) {
-          case 'Hop': moveDistance = { y: 80, x: 0 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
-          case 'Skip': moveDistance = { y: 150, x: 0 }; break;
-          case 'Jump': moveDistance = { y: 80, x: 0 }; this.hop.style.display = 'none'; this.jump.style.display = 'block'; break;
-          case 'Skip-HopRight': moveDistance = { y: 80, x: 32 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
-          case 'Skip-HopLeft': moveDistance = { y: 80, x: -32 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
+    const updateStep = () => {
+      Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
+        const btn = wrap.querySelector('button');
+        const expl = wrap.querySelector('.explanation-text');
+        if (idx < index) {
+          btn && btn.classList.add('previous-step');
+          expl && expl.classList.add('previous-step');
+        } else {
+          btn && btn.classList.remove('previous-step');
+          expl && expl.classList.remove('previous-step');
         }
-        this.character.style.transform = `translateY(${-moveDistance.y * index}px) translateX(${moveDistance.x}px)`;
-      };
+      });
 
-      const updateExplanation = () => {
-        Array.from(this.destinationContainer.querySelectorAll('.explanation-text')).forEach(e => e.remove());
+      const action = buttonSequence[index];
+      let moveDistance = { y: 0, x: 0 };
+      switch (action) {
+        case 'Hop': 
+          moveDistance = { y: 80, x: 0 }; 
+          this.hop.style.display = 'block'; 
+          this.jump.style.display = 'none'; 
+          break;
+        case 'Skip': 
+          moveDistance = { y: 150, x: 0 }; 
+          break;
+        case 'Jump': 
+          moveDistance = { y: 80, x: 0 }; 
+          this.hop.style.display = 'none'; 
+          this.jump.style.display = 'block'; 
+          break;
+        case 'Skip-HopRight': 
+          moveDistance = { y: 80, x: 32 }; 
+          this.hop.style.display = 'block'; 
+          this.jump.style.display = 'none'; 
+          break;
+        case 'Skip-HopLeft': 
+          moveDistance = { y: 80, x: -32 }; 
+          this.hop.style.display = 'block'; 
+          this.jump.style.display = 'none'; 
+          break;
+      }
+      this.character.style.transform = `translateY(${-moveDistance.y * index}px) translateX(${moveDistance.x}px)`;
+    };
+
+    const updateExplanation = () => {
+      Array.from(this.destinationContainer.querySelectorAll('.explanation-text')).forEach(e => e.remove());
+      if (index < buttonSequence.length) {
         const wrapper = this.destinationContainer.children[index];
         const msg = document.createElement('div');
         msg.className = 'explanation-text';
         msg.innerText = explanations[buttonSequence[index]] || "Unknown step";
         wrapper.appendChild(msg);
-      };
-
-      nextBtn.onclick = () => {
-        if (index < buttonSequence.length - 1) {
-          index++;
-          updateStep();
-          updateExplanation();
-        } else {
-          nextBtn.style.display = 'none';
-          prevBtn.style.display = 'none';
-          this.runButton.style.display = 'inline-block';
-          this.checkButton.style.display = 'inline-block';
-          this.resetButton.style.display = 'inline-block';
-          if (callback) callback();
-        }
-      };
-
-      prevBtn.onclick = () => {
-        if (index > 0) {
-          index--;
-          updateStep();
-          updateExplanation();
-        }
-      };
-
-      updateStep();
-      updateExplanation();
-    };
- this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
-        case 'Skip': moveDistance = { y: 150, x: 0 }; break;
-        case 'Jump': moveDistance = { y: 80, x: 0 }; this.hop.style.display = 'none'; this.jump.style.display = 'block'; break;
-        case 'Skip-HopRight': moveDistance = { y: 80, x: 32 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
-        case 'Skip-HopLeft': moveDistance = { y: 80, x: -32 }; this.hop.style.display = 'block'; this.jump.style.display = 'none'; break;
-        default: moveDistance = { y: 0, x: 0 };
       }
-
-      this.yPosition += moveDistance.y;
-      this.xPosition = moveDistance.x;
-      this.character.style.transform = `translateY(${-this.yPosition}px) translateX(${this.xPosition}px)`;
-
-      const old = wrapper.querySelector('.explanation-text');
-      if (old) old.remove();
-
-      setTimeout(() => {
-        const msg = document.createElement('div');
-        msg.className = 'explanation-text';
-        msg.innerText = explanations[action] || "Unknown step";
-        wrapper.appendChild(msg);
-        //index++;
-        //setTimeout(moveNext, 1000);
-        const nextBtn = document.getElementById('nextStepButton');
-        nextBtn.style.display='inline-block';
-        nextBtn.onclick= () =>{
-          nextBtn.style.display ='none';
-          index++;
-          moveNext();
-        };
-      }, 1000);
     };
 
-    Array.from(this.destinationContainer.querySelectorAll('.explanation-text')).forEach(e => e.remove());
-    moveNext();
-    document.getElementById('nextStepButton').style.display = 'none';
+    nextBtn.onclick = () => {
+      if (index < buttonSequence.length - 1) {
+        index++;
+        updateStep();
+        updateExplanation();
+        if (index > 0) {
+          prevBtn.style.display = 'inline-block';
+        }
+      } else {
+        nextBtn.style.display = 'none';
+        prevBtn.style.display = 'none';
+        this.runButton.style.display = 'inline-block';
+        this.checkButton.style.display = 'inline-block';
+        this.resetButton.style.display = 'inline-block';
+        if (callback) callback();
+      }
+    };
+
+    prevBtn.onclick = () => {
+      if (index > 0) {
+        index--;
+        updateStep();
+        updateExplanation();
+        if (index === 0) {
+          prevBtn.style.display = 'none';
+        }
+      }
+    };
+
+    updateStep();
+    updateExplanation();
   }
 
   checkSequence() {
