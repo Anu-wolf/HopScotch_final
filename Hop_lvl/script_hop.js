@@ -77,11 +77,11 @@ class HopscotchGame {
     this.character.style.transform = `translateY(0px) translateX(0px)`;
 
     const explanations = {
-      'Hop': "Hop: A short leap forward.",
-      'Skip': "Skip: A longer skip forward.",
-      'Jump': "Jump: A high jump.",
-      'Skip-HopRight': "Diagonal move to the right.",
-      'Skip-HopLeft': "Diagonal move to the left."
+        'Hop': "Hop: A short leap forward.",
+        'Skip': "Skip: A longer skip forward.",
+        'Jump': "Jump: A high jump.",
+        'Skip-HopRight': "Diagonal move to the right.",
+        'Skip-HopLeft': "Diagonal move to the left."
     };
 
     // Hide all control buttons initially
@@ -99,91 +99,92 @@ class HopscotchGame {
     Array.from(this.destinationContainer.querySelectorAll('.previous-step')).forEach(el => el.classList.remove('previous-step'));
 
     const updateStep = () => {
-      Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
-        const btn = wrap.querySelector('button');
-        const expl = wrap.querySelector('.explanation-text');
-        if (idx < index) {
-          btn && btn.classList.add('previous-step');
-          expl && expl.classList.add('previous-step');
-        } else {
-          btn && btn.classList.remove('previous-step');
-          expl && expl.classList.remove('previous-step');
-        }
-      });
+        // Highlight previous steps
+        Array.from(this.destinationContainer.children).forEach((wrap, idx) => {
+            const btn = wrap.querySelector('button');
+            const expl = wrap.querySelector('.explanation-text');
+            if (idx < index) {
+                btn && btn.classList.add('previous-step');
+                expl && expl.classList.add('previous-step');
+            } else {
+                btn && btn.classList.remove('previous-step');
+                expl && expl.classList.remove('previous-step');
+            }
+        });
 
-      const action = buttonSequence[index];
-      let moveDistance = { y: 0, x: 0 };
-      switch (action) {
-        case 'Hop': 
-          moveDistance = { y: 80, x: 0 }; 
-          this.hop.style.display = 'block'; 
-          this.jump.style.display = 'none'; 
-          break;
-        case 'Skip': 
-          moveDistance = { y: 150, x: 0 }; 
-          break;
-        case 'Jump': 
-          moveDistance = { y: 80, x: 0 }; 
-          this.hop.style.display = 'none'; 
-          this.jump.style.display = 'block'; 
-          break;
-        case 'Skip-HopRight': 
-          moveDistance = { y: 80, x: 32 }; 
-          this.hop.style.display = 'block'; 
-          this.jump.style.display = 'none'; 
-          break;
-        case 'Skip-HopLeft': 
-          moveDistance = { y: 80, x: -32 }; 
-          this.hop.style.display = 'block'; 
-          this.jump.style.display = 'none'; 
-          break;
-      }
-      this.character.style.transform = `translateY(${-moveDistance.y * index}px) translateX(${moveDistance.x}px)`;
+        // Calculate total movement up to current step
+        let totalY = 0;
+        let totalX = 0;
+        for (let i = 0; i <= index; i++) {
+            const action = buttonSequence[i];
+            switch (action) {
+                case 'Hop': totalY += 80; break;
+                case 'Skip': totalY += 150; break;
+                case 'Jump': totalY += 80; break;
+                case 'Skip-HopRight': totalY += 80; totalX += 32; break;
+                case 'Skip-HopLeft': totalY += 80; totalX -= 32; break;
+            }
+        }
+        this.character.style.transform = `translateY(${-totalY}px) translateX(${totalX}px)`;
+
+        // Set character image based on current action
+        const currentAction = buttonSequence[index];
+        if (currentAction === 'Jump') {
+            this.hop.style.display = 'none';
+            this.jump.style.display = 'block';
+        } else if (currentAction === 'Hop' || currentAction === 'Skip-HopRight' || currentAction === 'Skip-HopLeft') {
+            this.hop.style.display = 'block';
+            this.jump.style.display = 'none';
+        } else {
+            this.hop.style.display = 'block';
+            this.jump.style.display = 'none';
+        }
     };
 
     const updateExplanation = () => {
-      Array.from(this.destinationContainer.querySelectorAll('.explanation-text')).forEach(e => e.remove());
-      if (index < buttonSequence.length) {
-        const wrapper = this.destinationContainer.children[index];
-        const msg = document.createElement('div');
-        msg.className = 'explanation-text';
-        msg.innerText = explanations[buttonSequence[index]] || "Unknown step";
-        wrapper.appendChild(msg);
-      }
+        Array.from(this.destinationContainer.querySelectorAll('.explanation-text')).forEach(e => e.remove());
+        if (index < buttonSequence.length) {
+            const wrapper = this.destinationContainer.children[index];
+            const msg = document.createElement('div');
+            msg.className = 'explanation-text';
+            msg.innerText = explanations[buttonSequence[index]] || "Unknown step";
+            wrapper.appendChild(msg);
+        }
     };
 
+    // Initialize the first step immediately
+    updateStep();
+    updateExplanation();
+
     nextBtn.onclick = () => {
-      if (index < buttonSequence.length - 1) {
-        index++;
-        updateStep();
-        updateExplanation();
-        if (index > 0) {
-          prevBtn.style.display = 'inline-block';
+        if (index < buttonSequence.length - 1) {
+            index++;
+            updateStep();
+            updateExplanation();
+            if (index > 0) {
+                prevBtn.style.display = 'inline-block';
+            }
+        } else {
+            nextBtn.style.display = 'none';
+            prevBtn.style.display = 'none';
+            this.runButton.style.display = 'inline-block';
+            this.checkButton.style.display = 'inline-block';
+            this.resetButton.style.display = 'inline-block';
+            if (callback) callback();
         }
-      } else {
-        nextBtn.style.display = 'none';
-        prevBtn.style.display = 'none';
-        this.runButton.style.display = 'inline-block';
-        this.checkButton.style.display = 'inline-block';
-        this.resetButton.style.display = 'inline-block';
-        if (callback) callback();
-      }
     };
 
     prevBtn.onclick = () => {
-      if (index > 0) {
-        index--;
-        updateStep();
-        updateExplanation();
-        if (index === 0) {
-          prevBtn.style.display = 'none';
+        if (index > 0) {
+            index--;
+            updateStep();
+            updateExplanation();
+            if (index === 0) {
+                prevBtn.style.display = 'none';
+            }
         }
-      }
     };
-
-    updateStep();
-    updateExplanation();
-  }
+}
 
   checkSequence() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
