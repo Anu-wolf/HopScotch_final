@@ -553,9 +553,21 @@ canvas.confetti-canvas {
 .bottom-controls{
   display: flex;
   gap: 15px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  width: 100%;
+  max-width: 300px;
+}
+
+#prevStepButton {
+  order: 1;
+  margin-right: auto;
+}
+
+#nextStepButton {
+  order: 3;
+  margin-left: auto;
 }
 
 
