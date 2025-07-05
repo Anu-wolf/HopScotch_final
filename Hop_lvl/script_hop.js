@@ -48,6 +48,9 @@ class HopscotchGame {
       this.destinationContainer.appendChild(wrapper);
       draggedButton.setAttribute("draggable", "false");
       draggedButton.style.cursor = 'no-drop';
+      
+      // Check if the dropped tile is in the correct position
+      this.checkWrongTile();
     }
   }
 
@@ -57,6 +60,28 @@ class HopscotchGame {
       if (currentOrder[i] !== this.availableButtons[i]) return false;
     }
     return true;
+  }
+
+  checkWrongTile() {
+    const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
+    
+    // Check each position to see if the tile is wrong
+    for (let i = 0; i < currentOrder.length; i++) {
+      if (currentOrder[i] !== this.availableButtons[i]) {
+        // Wrong tile detected - show popup
+        this.showWrongMessage();
+        return;
+      }
+    }
+  }
+
+  showWrongMessage() {
+    const wrongBtn = document.getElementById('wrongButton');
+    wrongBtn.classList.remove('hidden');
+    wrongBtn.classList.add('show');
+    setTimeout(() => {
+      wrongBtn.classList.remove('show');
+    }, 3000); // Show for 3 seconds
   }
 
   resetGame() {
