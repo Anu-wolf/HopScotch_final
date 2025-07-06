@@ -341,22 +341,23 @@ function startStoneThrow(round, callback) {
   const droppableRect = droppableElements.getBoundingClientRect();
   const containerRect = droppableElements.parentElement.getBoundingClientRect();
   
-  // Position stone at the center top of the hopscotch tiles
+  // Position stone at the bottom of the hopscotch tiles
   stone.style.position = 'fixed';
   stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
-  stone.style.top = (droppableRect.top - 30) + 'px';
+  stone.style.top = (droppableRect.bottom + 20) + 'px';
   
   // Show and animate stone
   stone.classList.remove('hidden');
   stone.classList.add('rolling');
   
-  // After stone animation completes, show target step and initialize game
+  // After stone animation completes, keep stone visible and show target step message
   setTimeout(() => {
     stone.classList.remove('rolling');
-    stone.classList.add('hidden');
+    // Keep stone visible at final position
     
     // Show message about target step
     showTargetStepMessage(targetStep, actions.length, () => {
+      stone.classList.add('hidden'); // Hide stone after message
       callback(targetStep);
     });
   }, 1500); // Match the animation duration
@@ -380,14 +381,14 @@ function showTargetStepMessage(targetStep, totalSteps, callback) {
   
   const messageBox = document.createElement('div');
   messageBox.style.cssText = `
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: linear-gradient(135deg, #007bff, #0056b3);
     color: white;
     padding: 2rem 3rem;
     border-radius: 15px;
     text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 123, 255, 0.3);
     max-width: 400px;
   `;
   
