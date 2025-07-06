@@ -352,7 +352,7 @@ function startStoneThrow(callback) {
     setTimeout(() => {
       callback();
     }, 500);
-  }, 2000); // Match the animation duration
+  }, 2500); // Match the animation duration
 }
 
 function switchRound(roundNumber) {
