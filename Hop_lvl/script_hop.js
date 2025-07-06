@@ -1,8 +1,9 @@
 class HopscotchGame {
-  constructor(level, levelSequences) {
+  constructor(level, levelSequences, targetStep = null) {
     this.levelSequences = levelSequences;
     this.currentLevel = level;
     this.availableButtons = this.levelSequences[level];
+    this.targetStep = targetStep || this.availableButtons.length; // Default to full sequence if no target
     this.yPosition = 0;
     this.xPosition = 0;
 
@@ -55,8 +56,10 @@ class HopscotchGame {
   }
 
   isOrderCorrect(currentOrder) {
-    if (currentOrder.length !== this.availableButtons.length) return false;
-    for (let i = 0; i < this.availableButtons.length; i++) {
+    // Check if the order is correct up to the target step
+    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+    if (currentOrder.length !== targetLength) return false;
+    for (let i = 0; i < targetLength; i++) {
       if (currentOrder[i] !== this.availableButtons[i]) return false;
     }
     return true;
@@ -65,8 +68,9 @@ class HopscotchGame {
   checkWrongTile() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
     
-    // Check each position to see if the tile is wrong
-    for (let i = 0; i < currentOrder.length; i++) {
+    // Check each position up to the target step to see if the tile is wrong
+    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+    for (let i = 0; i < Math.min(currentOrder.length, targetLength); i++) {
       if (currentOrder[i] !== this.availableButtons[i]) {
         // Wrong tile detected - show popup
         this.showWrongMessage();
@@ -221,7 +225,8 @@ class HopscotchGame {
     updateExplanation();
 
     nextBtn.onclick = () => {
-        if (index < buttonSequence.length - 1) {
+        const maxIndex = Math.min(this.targetStep - 1, buttonSequence.length - 1);
+        if (index < maxIndex) {
             index++;
             updateStep();
             updateExplanation();
@@ -318,7 +323,86 @@ function initializeGame(round) {
     buttonContainer.appendChild(wrapper);
   });
 
-  game = new HopscotchGame(round, levelSequences);
+  // Start with stone throw to determine target step
+  startStoneThrow(round, (targetStep) => {
+    game = new HopscotchGame(round, levelSequences, targetStep);
+  });
+}
+
+function startStoneThrow(round, callback) {
+  const stone = document.getElementById('stone');
+  const droppableElements = document.querySelector('.droppable-elements');
+  const actions = levelSequences[round];
+  
+  // Randomly select which step the stone will land on (1 to total steps)
+  const targetStep = Math.floor(Math.random() * actions.length) + 1;
+  
+  // Position stone at the top of the hopscotch tiles
+  const droppableRect = droppableElements.getBoundingClientRect();
+  stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
+  stone.style.top = (droppableRect.top - 20) + 'px';
+  
+  // Show and animate stone
+  stone.classList.remove('hidden');
+  stone.classList.add('rolling');
+  
+  // After stone animation completes, show target step and initialize game
+  setTimeout(() => {
+    stone.classList.remove('rolling');
+    stone.classList.add('hidden');
+    
+    // Show message about target step
+    showTargetStepMessage(targetStep, actions.length, () => {
+      callback(targetStep);
+    });
+  }, 1500); // Match the animation duration
+}
+
+function showTargetStepMessage(targetStep, totalSteps, callback) {
+  // Create a message overlay
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `;
+  
+  const messageBox = document.createElement('div');
+  messageBox.style.cssText = `
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 2rem 3rem;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+  `;
+  
+  messageBox.innerHTML = `
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+    <div>Stone landed on step ${targetStep}!</div>
+    <div style="font-size: 1rem; margin-top: 0.5rem; opacity: 0.9;">
+      Complete the sequence up to step ${targetStep} of ${totalSteps}
+    </div>
+  `;
+  
+  overlay.appendChild(messageBox);
+  document.body.appendChild(overlay);
+  
+  // Remove overlay after 3 seconds and continue
+  setTimeout(() => {
+    document.body.removeChild(overlay);
+    callback();
+  }, 3000);
 }
 
 function switchRound(roundNumber) {
