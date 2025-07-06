@@ -477,8 +477,8 @@ canvas.confetti-canvas {
   position: fixed;
   top: 50%;
   left: 50%;
-  height: 100px;
-  width: 250px;
+  height: 200px;
+  width: 200px;
   transform: translate(-50%, -50%) scale(1);
   background-color: #d35663;
   color: white;
