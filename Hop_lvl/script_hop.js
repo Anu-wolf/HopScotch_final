@@ -85,16 +85,28 @@ class HopscotchGame {
     // Show "Try Again" button after wrong message
     setTimeout(() => {
       wrongBtn.classList.remove('show');
+      
+      // Hide all other control buttons
+      this.runButton.style.display = 'none';
+      this.resetButton.style.display = 'none';
+      this.checkButton.style.display = 'none';
+      
+      // Show only the Try Again button
       tryAgainBtn.style.display = 'inline-block';
       
       // Add event listener for try again button
       tryAgainBtn.onclick = () => this.removeLastTile();
-    }, 5000); // Show wrong message for 5 seconds
+    }, 3500); // Show wrong message for 3.5 seconds
   }
 
   removeLastTile() {
     const tryAgainBtn = document.getElementById('tryAgainButton');
     tryAgainBtn.style.display = 'none';
+    
+    // Restore all control buttons
+    this.runButton.style.display = 'inline-block';
+    this.resetButton.style.display = 'inline-block';
+    this.checkButton.style.display = 'inline-block';
     
     // Remove the last tile from destination container
     const destinationContainer = this.destinationContainer;
