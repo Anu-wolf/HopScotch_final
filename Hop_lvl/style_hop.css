@@ -504,6 +504,8 @@ canvas.confetti-canvas {
   animation: bounceInOut 0.6s ease-out;
   pointer-events: auto;
 }
+
+
 .hidden{
   display: none;
 }

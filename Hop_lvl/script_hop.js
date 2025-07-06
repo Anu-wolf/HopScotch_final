@@ -77,11 +77,38 @@ class HopscotchGame {
 
   showWrongMessage() {
     const wrongBtn = document.getElementById('wrongButton');
+    const tryAgainBtn = document.getElementById('tryAgainButton');
+    
     wrongBtn.classList.remove('hidden');
     wrongBtn.classList.add('show');
+    
+    // Show "Try Again" button after wrong message
     setTimeout(() => {
       wrongBtn.classList.remove('show');
-    }, 5000); // Show for 5 seconds
+      tryAgainBtn.style.display = 'inline-block';
+      
+      // Add event listener for try again button
+      tryAgainBtn.onclick = () => this.removeLastTile();
+    }, 5000); // Show wrong message for 5 seconds
+  }
+
+  removeLastTile() {
+    const tryAgainBtn = document.getElementById('tryAgainButton');
+    tryAgainBtn.style.display = 'none';
+    
+    // Remove the last tile from destination container
+    const destinationContainer = this.destinationContainer;
+    if (destinationContainer.children.length > 0) {
+      const lastTile = destinationContainer.lastElementChild;
+      const button = lastTile.querySelector('button');
+      
+      // Move the tile back to the button container
+      this.buttonContainer.appendChild(lastTile);
+      
+      // Make the button draggable again
+      button.setAttribute("draggable", "true");
+      button.style.cursor = 'move';
+    }
   }
 
   resetGame() {
@@ -230,9 +257,8 @@ class HopscotchGame {
     this.moveCharacter(currentOrder, () => {
       if (this.isOrderCorrect(currentOrder)) {
         showCorrectMessage();
-      } else {
-        alert('Oops! The buttons are not in the correct order or some buttons are missing. Use the reset button and run again.');
       }
+      // Removed the alert popup - now only the correct message shows
     });
   }
 
