@@ -375,8 +375,8 @@ function startStoneThrow(round, callback) {
   const droppableElements = document.querySelector('.droppable-elements');
   const actions = levelSequences[round];
   
-  // Randomly select which step the stone will land on (1 to total steps)
-  const targetStep = Math.floor(Math.random() * actions.length) + 1;
+  // Randomly select which step the stone will land on (2 to total steps - never tile 1)
+  const targetStep = Math.floor(Math.random() * (actions.length - 1)) + 2;
   
   // Get the position of the hopscotch image
   const droppableRect = droppableElements.getBoundingClientRect();
