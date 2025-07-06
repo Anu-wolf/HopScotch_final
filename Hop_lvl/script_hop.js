@@ -318,7 +318,41 @@ function initializeGame(round) {
     buttonContainer.appendChild(wrapper);
   });
 
-  game = new HopscotchGame(round, levelSequences);
+  // Start with stone throw animation
+  startStoneThrow(() => {
+    game = new HopscotchGame(round, levelSequences);
+  });
+}
+
+function startStoneThrow(callback) {
+  const stone = document.getElementById('stone');
+  const buttonContainer = document.getElementById('buttonContainer');
+  const destinationContainer = document.getElementById('destinationContainer');
+  
+  // Hide game elements initially
+  buttonContainer.style.opacity = '0';
+  destinationContainer.style.opacity = '0';
+  
+  // Show and animate stone
+  stone.classList.remove('hidden');
+  stone.classList.add('rolling');
+  
+  // After stone animation completes, show game elements and initialize game
+  setTimeout(() => {
+    stone.classList.remove('rolling');
+    stone.classList.add('hidden');
+    
+    // Fade in game elements
+    buttonContainer.style.transition = 'opacity 0.5s ease-in';
+    destinationContainer.style.transition = 'opacity 0.5s ease-in';
+    buttonContainer.style.opacity = '1';
+    destinationContainer.style.opacity = '1';
+    
+    // Initialize game after fade-in
+    setTimeout(() => {
+      callback();
+    }, 500);
+  }, 2000); // Match the animation duration
 }
 
 function switchRound(roundNumber) {
