@@ -54,6 +54,16 @@ class HopscotchGame {
         return;
       }
       
+      // Special case: If target step is 2, only allow "Skip" as first action
+      if (this.targetStep === 2 && currentOrder.length === 0) {
+        const action = draggedButton.dataset.action;
+        if (action !== 'Skip') {
+          // Show error message for wrong action
+          this.showWrongMessage();
+          return;
+        }
+      }
+      
       const wrapper = draggedButton.parentElement;
       this.destinationContainer.appendChild(wrapper);
       draggedButton.setAttribute("draggable", "false");
@@ -69,6 +79,13 @@ class HopscotchGame {
     const targetLength = Math.min(this.targetStep, this.availableButtons.length);
     // Allow player to place more tiles than target, but check only up to target
     if (currentOrder.length < targetLength) return false;
+    
+    // Special case: If target step is 2, only "Skip" is correct
+    if (this.targetStep === 2) {
+      return currentOrder.length === 1 && currentOrder[0] === 'Skip';
+    }
+    
+    // Normal case: Check against the sequence
     for (let i = 0; i < targetLength; i++) {
       if (currentOrder[i] !== this.availableButtons[i]) return false;
     }
@@ -78,17 +95,26 @@ class HopscotchGame {
   checkWrongTile() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
     
-    // Check each position up to the target step to see if the tile is wrong
-    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
-    for (let i = 0; i < Math.min(currentOrder.length, targetLength); i++) {
-      if (currentOrder[i] !== this.availableButtons[i]) {
-        // Wrong tile detected - show popup
+    // Special case: If target step is 2, only "Skip" is correct
+    if (this.targetStep === 2) {
+      if (currentOrder.length > 0 && currentOrder[0] !== 'Skip') {
         this.showWrongMessage();
         return;
+      }
+    } else {
+      // Normal case: Check each position up to the target step to see if the tile is wrong
+      const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+      for (let i = 0; i < Math.min(currentOrder.length, targetLength); i++) {
+        if (currentOrder[i] !== this.availableButtons[i]) {
+          // Wrong tile detected - show popup
+          this.showWrongMessage();
+          return;
+        }
       }
     }
     
     // If we've reached the target step, disable remaining buttons
+    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
     if (currentOrder.length >= targetLength) {
       this.disableRemainingButtons();
     }
