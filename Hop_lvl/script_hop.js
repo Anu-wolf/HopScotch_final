@@ -81,7 +81,7 @@ class HopscotchGame {
     wrongBtn.classList.add('show');
     setTimeout(() => {
       wrongBtn.classList.remove('show');
-    }, 3000); // Show for 3 seconds
+    }, 5000); // Show for 5 seconds
   }
 
   resetGame() {
