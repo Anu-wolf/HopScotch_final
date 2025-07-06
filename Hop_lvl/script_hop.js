@@ -378,20 +378,31 @@ function startStoneThrow(round, callback) {
   // Randomly select which step the stone will land on (1 to total steps)
   const targetStep = Math.floor(Math.random() * actions.length) + 1;
   
-  // Position stone relative to the droppable elements container
+  // Get the specific tile element for the target step
+  const tileClasses = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+  const targetTileClass = tileClasses[targetStep - 1];
+  const targetTile = droppableElements.querySelector(`.${targetTileClass}`);
+  
+  if (!targetTile) {
+    console.error(`Target tile ${targetStep} not found`);
+    return;
+  }
+  
+  // Get the position of the target tile
+  const targetTileRect = targetTile.getBoundingClientRect();
   const droppableRect = droppableElements.getBoundingClientRect();
   
-  // Calculate the final position where stone should land (based on target step)
-  const tileHeight = droppableRect.height / actions.length;
-  const finalY = droppableRect.top + (actions.length - targetStep) * tileHeight;
+  // Calculate the starting position (bottom of tiles) and final position (target tile)
+  const startY = droppableRect.bottom + 20;
+  const finalY = targetTileRect.top + targetTileRect.height / 2;
   
   // Position stone at the bottom of the hopscotch tiles (step 1)
   stone.style.position = 'fixed';
-  stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
-  stone.style.top = (droppableRect.bottom + 20) + 'px';
+  stone.style.left = (targetTileRect.left + targetTileRect.width / 2 - 10) + 'px';
+  stone.style.top = startY + 'px';
   
   // Set the final position for the animation (from step 1 to target step)
-  stone.style.setProperty('--final-y', `${finalY - droppableRect.bottom - 20}px`);
+  stone.style.setProperty('--final-y', `${finalY - startY}px`);
   
   // Show and animate stone
   stone.classList.remove('hidden');
@@ -401,7 +412,7 @@ function startStoneThrow(round, callback) {
   setTimeout(() => {
     stone.classList.remove('rolling');
     // Position stone at the final landing position and keep it there permanently
-    stone.style.transform = `translateY(${finalY - droppableRect.bottom - 20}px) rotate(900deg) scale(1)`;
+    stone.style.transform = `translateY(${finalY - startY}px) rotate(900deg) scale(1)`;
     
     // Show message about target step
     showTargetStepMessage(targetStep, actions.length, () => {
