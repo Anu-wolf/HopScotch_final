@@ -378,27 +378,21 @@ function startStoneThrow(round, callback) {
   // Randomly select which step the stone will land on (1 to total steps)
   const targetStep = Math.floor(Math.random() * actions.length) + 1;
   
-  // Get the specific tile element for the target step
-  const tileClasses = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
-  const targetTileClass = tileClasses[targetStep - 1];
-  const targetTile = droppableElements.querySelector(`.${targetTileClass}`);
-  
-  if (!targetTile) {
-    console.error(`Target tile ${targetStep} not found`);
-    return;
-  }
-  
-  // Get the position of the target tile
-  const targetTileRect = targetTile.getBoundingClientRect();
+  // Get the position of the hopscotch image
   const droppableRect = droppableElements.getBoundingClientRect();
   
-  // Calculate the starting position (bottom of tiles) and final position (target tile)
-  const startY = droppableRect.bottom + 20;
-  const finalY = targetTileRect.top + targetTileRect.height / 2;
+  // Calculate tile positions based on the image height
+  const imageHeight = droppableRect.height;
+  const tileHeight = imageHeight / actions.length;
+  
+  // Calculate the final position where stone should land (based on target step)
+  // Step 1 is at the bottom, step N is at the top
+  const finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
   
   // Position stone at the bottom of the hopscotch tiles (step 1)
+  const startY = droppableRect.bottom + 20;
   stone.style.position = 'fixed';
-  stone.style.left = (targetTileRect.left + targetTileRect.width / 2 - 10) + 'px';
+  stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
   stone.style.top = startY + 'px';
   
   // Set the final position for the animation (from step 1 to target step)
