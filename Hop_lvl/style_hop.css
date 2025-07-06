@@ -483,7 +483,8 @@ canvas.confetti-canvas {
   background-color: #d35663;
   color: white;
   font-size: 2rem;
-  font-weight: bold;
+  /*font-weight: bold;*/
+  font-style: inherit;
   padding: 2.75rem 2.5rem;
   border: none;
   border-radius: 30px;
@@ -491,7 +492,7 @@ canvas.confetti-canvas {
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
-  box-shadow: 0 0 20px rgba(184, 78, 89, 0.5);
+  box-shadow: 0 0 20px rgba(240, 143, 153, 0.5);
   display: inline-flex;
   align-items: center;
   gap: 1rem;
