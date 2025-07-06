@@ -444,7 +444,7 @@ function showTargetStepMessage(targetStep, totalSteps, callback) {
     <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
     <div>Stone landed on step ${targetStep}!</div>
     <div style="font-size: 1rem; margin-top: 0.5rem; opacity: 0.9;">
-      Complete the sequence up to step ${targetStep} of ${totalSteps}
+      Complete the sequence up to step ${targetStep} 
     </div>
   `;
   
