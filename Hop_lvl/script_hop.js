@@ -337,10 +337,14 @@ function startStoneThrow(round, callback) {
   // Randomly select which step the stone will land on (1 to total steps)
   const targetStep = Math.floor(Math.random() * actions.length) + 1;
   
-  // Position stone at the top of the hopscotch tiles
+  // Position stone relative to the droppable elements container
   const droppableRect = droppableElements.getBoundingClientRect();
+  const containerRect = droppableElements.parentElement.getBoundingClientRect();
+  
+  // Position stone at the center top of the hopscotch tiles
+  stone.style.position = 'fixed';
   stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
-  stone.style.top = (droppableRect.top - 20) + 'px';
+  stone.style.top = (droppableRect.top - 30) + 'px';
   
   // Show and animate stone
   stone.classList.remove('hidden');
