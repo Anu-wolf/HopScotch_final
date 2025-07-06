@@ -478,7 +478,7 @@ canvas.confetti-canvas {
   top: 50%;
   left: 50%;
   height: 200px;
-  width: 200px;
+  width: 300px;
   transform: translate(-50%, -50%) scale(1);
   background-color: #d35663;
   color: white;
@@ -491,7 +491,7 @@ canvas.confetti-canvas {
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
-  box-shadow: 0 0 20px rgba(220, 53, 69, 0.5);
+  box-shadow: 0 0 20px rgba(184, 78, 89, 0.5);
   display: inline-flex;
   align-items: center;
   gap: 1rem;
