@@ -476,8 +476,8 @@ canvas.confetti-canvas {
 #wrongButton {
   position: fixed;
   top: 60%;
-  height: 300px;
-  width: 350px;
+  height: 250px;
+  width: 150px;
   transform: translate(-50%, -50%) scale(1);
   background-color: #dc3545;
   color: white;
