@@ -96,7 +96,7 @@ class HopscotchGame {
       
       // Add event listener for try again button
       tryAgainBtn.onclick = () => this.removeLastTile();
-    }, 3500); // Show wrong message for 3.5 seconds
+    }, 2500); // Show wrong message for 2.5 seconds
   }
 
   removeLastTile() {
