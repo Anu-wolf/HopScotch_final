@@ -45,6 +45,15 @@ class HopscotchGame {
     const buttonId = event.dataTransfer.getData('text/plain');
     const draggedButton = document.getElementById(buttonId);
     if (draggedButton) {
+      // Check if we've already reached the target step
+      const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
+      const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+      
+      if (currentOrder.length >= targetLength) {
+        // Don't allow more tiles to be placed
+        return;
+      }
+      
       const wrapper = draggedButton.parentElement;
       this.destinationContainer.appendChild(wrapper);
       draggedButton.setAttribute("draggable", "false");
@@ -58,7 +67,8 @@ class HopscotchGame {
   isOrderCorrect(currentOrder) {
     // Check if the order is correct up to the target step
     const targetLength = Math.min(this.targetStep, this.availableButtons.length);
-    if (currentOrder.length !== targetLength) return false;
+    // Allow player to place more tiles than target, but check only up to target
+    if (currentOrder.length < targetLength) return false;
     for (let i = 0; i < targetLength; i++) {
       if (currentOrder[i] !== this.availableButtons[i]) return false;
     }
@@ -76,6 +86,11 @@ class HopscotchGame {
         this.showWrongMessage();
         return;
       }
+    }
+    
+    // If we've reached the target step, disable remaining buttons
+    if (currentOrder.length >= targetLength) {
+      this.disableRemainingButtons();
     }
   }
 
@@ -140,6 +155,15 @@ class HopscotchGame {
     this.character.style.transform = `translateY(0px) translateX(0px)`;
   }
 
+  disableRemainingButtons() {
+    const buttons = Array.from(this.buttonContainer.querySelectorAll("button"));
+    buttons.forEach(button => {
+      button.setAttribute("draggable", "false");
+      button.style.cursor = 'not-allowed';
+      button.style.opacity = '0.5';
+    });
+  }
+
   moveCharacter(buttonSequence, callback) {
     let index = 0;
     this.character.style.transform = `translateY(0px) translateX(0px)`;
@@ -180,10 +204,11 @@ class HopscotchGame {
             }
         });
 
-        // Calculate total movement up to current step
+        // Calculate total movement up to current step (only up to target step)
         let totalY = 0;
         let totalX = 0;
-        for (let i = 0; i <= index; i++) {
+        const maxSteps = Math.min(this.targetStep, buttonSequence.length);
+        for (let i = 0; i <= Math.min(index, maxSteps - 1); i++) {
             const action = buttonSequence[i];
             switch (action) {
                 case 'Hop': totalY += 80; break;
@@ -257,6 +282,14 @@ class HopscotchGame {
 
   checkSequence() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
+    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+    
+    // Only check if we have the correct number of tiles for target step
+    if (currentOrder.length !== targetLength) {
+      alert(`You need to place exactly ${targetLength} tiles to match the stone landing position!`);
+      return;
+    }
+    
     this.moveCharacter(currentOrder, () => {
       if (this.isOrderCorrect(currentOrder)) {
         alert('The order is right, now use the run button to finish the level');
@@ -271,6 +304,14 @@ class HopscotchGame {
 
   runSequence() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
+    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+    
+    // Only run if we have the correct number of tiles for target step
+    if (currentOrder.length !== targetLength) {
+      alert(`You need to place exactly ${targetLength} tiles to match the stone landing position!`);
+      return;
+    }
+    
     this.moveCharacter(currentOrder, () => {
       if (this.isOrderCorrect(currentOrder)) {
         showCorrectMessage();
@@ -339,12 +380,18 @@ function startStoneThrow(round, callback) {
   
   // Position stone relative to the droppable elements container
   const droppableRect = droppableElements.getBoundingClientRect();
-  const containerRect = droppableElements.parentElement.getBoundingClientRect();
+  
+  // Calculate the final position where stone should land (based on target step)
+  const tileHeight = droppableRect.height / actions.length;
+  const finalY = droppableRect.top + (actions.length - targetStep) * tileHeight;
   
   // Position stone at the bottom of the hopscotch tiles
   stone.style.position = 'fixed';
   stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
   stone.style.top = (droppableRect.bottom + 20) + 'px';
+  
+  // Set the final position for the animation
+  stone.style.setProperty('--final-y', `${finalY - droppableRect.bottom - 20}px`);
   
   // Show and animate stone
   stone.classList.remove('hidden');
@@ -353,7 +400,8 @@ function startStoneThrow(round, callback) {
   // After stone animation completes, keep stone visible and show target step message
   setTimeout(() => {
     stone.classList.remove('rolling');
-    // Keep stone visible at final position
+    // Position stone at the final landing position
+    stone.style.transform = `translateY(${finalY - droppableRect.bottom - 20}px) rotate(900deg) scale(1)`;
     
     // Show message about target step
     showTargetStepMessage(targetStep, actions.length, () => {
