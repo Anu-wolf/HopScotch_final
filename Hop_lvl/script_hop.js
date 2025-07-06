@@ -385,12 +385,12 @@ function startStoneThrow(round, callback) {
   const tileHeight = droppableRect.height / actions.length;
   const finalY = droppableRect.top + (actions.length - targetStep) * tileHeight;
   
-  // Position stone at the bottom of the hopscotch tiles
+  // Position stone at the bottom of the hopscotch tiles (step 1)
   stone.style.position = 'fixed';
   stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
   stone.style.top = (droppableRect.bottom + 20) + 'px';
   
-  // Set the final position for the animation
+  // Set the final position for the animation (from step 1 to target step)
   stone.style.setProperty('--final-y', `${finalY - droppableRect.bottom - 20}px`);
   
   // Show and animate stone
@@ -400,12 +400,12 @@ function startStoneThrow(round, callback) {
   // After stone animation completes, keep stone visible and show target step message
   setTimeout(() => {
     stone.classList.remove('rolling');
-    // Position stone at the final landing position
+    // Position stone at the final landing position and keep it there permanently
     stone.style.transform = `translateY(${finalY - droppableRect.bottom - 20}px) rotate(900deg) scale(1)`;
     
     // Show message about target step
     showTargetStepMessage(targetStep, actions.length, () => {
-      stone.classList.add('hidden'); // Hide stone after message
+      // Don't hide the stone - keep it visible permanently
       callback(targetStep);
     });
   }, 1500); // Match the animation duration
