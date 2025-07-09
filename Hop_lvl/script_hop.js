@@ -419,7 +419,8 @@ function startStoneThrow(round, callback) {
   const tileHeight = imageHeight / actions.length;
   
   // Calculate the final position where stone should land
-  const finalY = droppableRect.top + (targetStep - 1) * tileHeight + tileHeight / 2;
+  // Try inverted numbering: step 1 at top, step N at bottom
+  const finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
   
   // Position stone at the bottom of the hopscotch tiles (step 1)
   const startY = droppableRect.bottom + 20;
@@ -451,15 +452,15 @@ function animateStoneThrow(stone, startY, finalY, targetStep, totalSteps, callba
   const droppableRect = droppableElements.getBoundingClientRect();
   const tileHeight = droppableRect.height / totalSteps;
   
-  // Calculate position for each step (step 1 is at bottom, step N is at top)
-  for (let i = 1; i <= totalSteps; i++) {
-    const stepY = droppableRect.top + (i - 1) * tileHeight + tileHeight / 2;
+  // Calculate position for each step (step 1 is at top, step N is at bottom)
+  for (let i = 1; i <= targetStep; i++) {
+    const stepY = droppableRect.top + (totalSteps - i) * tileHeight + tileHeight / 2;
     stepPositions.push(stepY);
   }
   
-  // Create animation that goes through each step up to target step
+  // Create animation that goes through each step up to target step ONLY
   let currentStep = 0;
-  const animationDuration = 2000; // 2 seconds total
+  const animationDuration = 1500; // 1.5 seconds total
   const stepDuration = animationDuration / targetStep;
   
   const animateStep = () => {
@@ -474,11 +475,8 @@ function animateStoneThrow(stone, startY, finalY, targetStep, totalSteps, callba
       currentStep++;
       setTimeout(animateStep, stepDuration);
     } else {
-      // Final position
-      stone.style.transition = `transform 0.3s ease-out`;
-      stone.style.transform = `translateY(${finalY - startY}px) rotate(720deg) scale(1)`;
-      
-      setTimeout(callback, 300);
+      // Animation complete - stone is already at final position
+      setTimeout(callback, 100);
     }
   };
   
