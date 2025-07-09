@@ -419,8 +419,23 @@ function startStoneThrow(round, callback) {
   const tileHeight = imageHeight / actions.length;
   
   // Calculate the final position where stone should land
-  // Try inverted numbering: step 1 at top, step N at bottom
-  const finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
+  // Try different numbering schemes to find the correct one
+  let finalY;
+  
+  // Scheme 1: step 1 at bottom, step N at top
+  // finalY = droppableRect.top + (targetStep - 1) * tileHeight + tileHeight / 2;
+  
+  // Scheme 2: step 1 at top, step N at bottom  
+  // finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
+  
+  // Scheme 2: step 1 at top, step N at bottom  
+  finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
+  
+  // Debug: Log the values
+  console.log('Target step:', targetStep);
+  console.log('Total actions:', actions.length);
+  console.log('Tile height:', tileHeight);
+  console.log('Final Y position:', finalY);
   
   // Position stone at the bottom of the hopscotch tiles (step 1)
   const startY = droppableRect.bottom + 20;
