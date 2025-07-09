@@ -428,8 +428,8 @@ function startStoneThrow(round, callback) {
   // Scheme 2: step 1 at top, step N at bottom  
   // finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
   
-  // Scheme 2: step 1 at top, step N at bottom  
-  finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
+  // Go back to original: step 1 at bottom, step N at top
+  finalY = droppableRect.top + (targetStep - 1) * tileHeight + tileHeight / 2;
   
   // Debug: Log the values
   console.log('Target step:', targetStep);
@@ -467,11 +467,17 @@ function animateStoneThrow(stone, startY, finalY, targetStep, totalSteps, callba
   const droppableRect = droppableElements.getBoundingClientRect();
   const tileHeight = droppableRect.height / totalSteps;
   
-  // Calculate position for each step (step 1 is at top, step N is at bottom)
+  // Calculate position for each step using the same logic as final position
   for (let i = 1; i <= targetStep; i++) {
-    const stepY = droppableRect.top + (totalSteps - i) * tileHeight + tileHeight / 2;
+    // Use the same calculation as finalY for consistency
+    const stepY = droppableRect.top + (i - 1) * tileHeight + tileHeight / 2;
     stepPositions.push(stepY);
   }
+  
+  // Debug: Log step positions
+  console.log('Step positions:', stepPositions);
+  console.log('Target step:', targetStep);
+  console.log('Final Y:', finalY);
   
   // Create animation that goes through each step up to target step ONLY
   let currentStep = 0;
