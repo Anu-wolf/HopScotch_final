@@ -368,6 +368,13 @@ function initializeGame(round) {
   if (game) {
     document.getElementById('destinationContainer').innerHTML = '';
     document.getElementById('buttonContainer').innerHTML = '';
+    // Hide any existing stone to prevent multiple animations
+    const existingStone = document.getElementById('stone');
+    if (existingStone) {
+      existingStone.classList.add('hidden');
+      existingStone.classList.remove('rolling');
+      existingStone.style.transform = '';
+    }
   }
 
   document.getElementById('currentRound').innerText = round;
@@ -411,9 +418,8 @@ function startStoneThrow(round, callback) {
   const imageHeight = droppableRect.height;
   const tileHeight = imageHeight / actions.length;
   
-  // Calculate the final position where stone should land (based on target step)
-  // Step 1 is at the bottom, step N is at the top
-  const finalY = droppableRect.top + (actions.length - targetStep) * tileHeight + tileHeight / 2;
+  // Calculate the final position where stone should land
+  const finalY = droppableRect.top + (targetStep - 1) * tileHeight + tileHeight / 2;
   
   // Position stone at the bottom of the hopscotch tiles (step 1)
   const startY = droppableRect.bottom + 20;
@@ -421,25 +427,63 @@ function startStoneThrow(round, callback) {
   stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
   stone.style.top = startY + 'px';
   
-  // Set the final position for the animation (from step 1 to target step)
-  stone.style.setProperty('--final-y', `${finalY - startY}px`);
+  // Reset any previous animation state
+  stone.classList.remove('rolling');
+  stone.style.transform = '';
   
-  // Show and animate stone
-  stone.classList.remove('hidden');
-  stone.classList.add('rolling');
-  
-  // After stone animation completes, keep stone visible and show target step message
-  setTimeout(() => {
-    stone.classList.remove('rolling');
-    // Position stone at the final landing position and keep it there permanently
-    stone.style.transform = `translateY(${finalY - startY}px) rotate(900deg) scale(1)`;
-    
+  // Create a realistic stone throw animation that goes through each step once
+  animateStoneThrow(stone, startY, finalY, targetStep, actions.length, () => {
     // Show message about target step
     showTargetStepMessage(targetStep, actions.length, () => {
       // Don't hide the stone - keep it visible permanently
       callback(targetStep);
     });
-  }, 1500); // Match the animation duration
+  });
+}
+
+function animateStoneThrow(stone, startY, finalY, targetStep, totalSteps, callback) {
+  // Show stone
+  stone.classList.remove('hidden');
+  
+  // Calculate step positions
+  const stepPositions = [];
+  const droppableElements = document.querySelector('.droppable-elements');
+  const droppableRect = droppableElements.getBoundingClientRect();
+  const tileHeight = droppableRect.height / totalSteps;
+  
+  // Calculate position for each step (step 1 is at bottom, step N is at top)
+  for (let i = 1; i <= totalSteps; i++) {
+    const stepY = droppableRect.top + (i - 1) * tileHeight + tileHeight / 2;
+    stepPositions.push(stepY);
+  }
+  
+  // Create animation that goes through each step up to target step
+  let currentStep = 0;
+  const animationDuration = 2000; // 2 seconds total
+  const stepDuration = animationDuration / targetStep;
+  
+  const animateStep = () => {
+    if (currentStep < targetStep) {
+      const targetY = stepPositions[currentStep];
+      const progress = (currentStep + 1) / targetStep;
+      const rotation = progress * 720; // Total rotation over the animation
+      
+      stone.style.transition = `transform ${stepDuration}ms ease-in-out`;
+      stone.style.transform = `translateY(${targetY - startY}px) rotate(${rotation}deg) scale(1)`;
+      
+      currentStep++;
+      setTimeout(animateStep, stepDuration);
+    } else {
+      // Final position
+      stone.style.transition = `transform 0.3s ease-out`;
+      stone.style.transform = `translateY(${finalY - startY}px) rotate(720deg) scale(1)`;
+      
+      setTimeout(callback, 300);
+    }
+  };
+  
+  // Start animation
+  setTimeout(animateStep, 100);
 }
 
 function showTargetStepMessage(targetStep, totalSteps, callback) {
