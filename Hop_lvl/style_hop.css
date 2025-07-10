@@ -744,9 +744,6 @@ canvas.confetti-canvas {
   pointer-events: none;
 }
 
-.stone.rolling {
-  /* Removed CSS animation to prevent interference with JavaScript animation */
-}
 
 @keyframes stoneRollDown {
   0% {
