@@ -461,6 +461,9 @@ function animateStoneThrow(stone, startY, finalY, targetStep, totalSteps, callba
   // Show stone
   stone.classList.remove('hidden');
   
+  // Remove any CSS animation classes that might interfere
+  stone.classList.remove('rolling');
+  
   // Calculate step positions
   const stepPositions = [];
   const droppableElements = document.querySelector('.droppable-elements');
@@ -490,13 +493,14 @@ function animateStoneThrow(stone, startY, finalY, targetStep, totalSteps, callba
       const progress = (currentStep + 1) / targetStep;
       const rotation = progress * 720; // Total rotation over the animation
       
+      // Use CSS transition for smooth movement
       stone.style.transition = `transform ${stepDuration}ms ease-in-out`;
       stone.style.transform = `translateY(${targetY - startY}px) rotate(${rotation}deg) scale(1)`;
       
       currentStep++;
       setTimeout(animateStep, stepDuration);
     } else {
-      // Animation complete - stone is already at final position
+      // Animation complete - stone stays at final position
       setTimeout(callback, 100);
     }
   };

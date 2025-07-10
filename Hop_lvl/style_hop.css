@@ -745,7 +745,7 @@ canvas.confetti-canvas {
 }
 
 .stone.rolling {
-  animation: stoneRollDown 1.5s ease-in-out forwards;
+  /* Removed CSS animation to prevent interference with JavaScript animation */
 }
 
 @keyframes stoneRollDown {
