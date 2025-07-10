@@ -420,8 +420,8 @@ function startStoneThrow(round, callback) {
   
   // Calculate the final position where stone should land
   // Step 1 is at the bottom, step N is at the top
-  // Try inverted numbering to match visual layout
-  const finalY = droppableRect.bottom - tileHeight * (actions.length - targetStep + 1) + tileHeight / 2;
+  // Use simple numbering: step 1 at bottom, step N at top
+  const finalY = droppableRect.bottom - tileHeight * targetStep + tileHeight / 2;
   
   // Debug: Log the values
   console.log('Target step:', targetStep);
@@ -463,11 +463,17 @@ function animateStoneThrow(stone, startY, finalY, targetStep, totalSteps, callba
   const tileHeight = droppableRect.height / totalSteps;
   
   // Calculate position for each step (step 1 is at bottom, step N is at top)
+  // Only calculate positions up to the target step
   for (let i = 1; i <= targetStep; i++) {
-    // Use inverted numbering to match visual layout
-    const stepY = droppableRect.bottom - tileHeight * (totalSteps - i + 1) + tileHeight / 2;
+    // Use simple numbering: step 1 at bottom, step N at top
+    const stepY = droppableRect.bottom - tileHeight * i + tileHeight / 2;
     stepPositions.push(stepY);
   }
+  
+  // Ensure the final position matches the last step position
+  const lastStepPosition = stepPositions[stepPositions.length - 1];
+  console.log('Last step position:', lastStepPosition);
+  console.log('Final Y:', finalY);
   
   // Debug: Log step positions
   console.log('Step positions:', stepPositions);
