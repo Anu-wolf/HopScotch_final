@@ -418,10 +418,15 @@ function startStoneThrow(round, callback) {
   const tileCount = 8;
   // Helper to get X, Y for a given step (1-based, bottom to top)
   function getTilePosition(step) {
-    
     const fracY = 1 - (step + 0.1) / tileCount; // Center of each tile
     const y = droppableRect.top + droppableRect.height * fracY;
-    const x = droppableRect.left + droppableRect.width / 2; // Centered horizontally
+    let x = droppableRect.left + droppableRect.width / 2; // Centered horizontally
+
+    // Offset for side-by-side tiles (4 & 5, 7 & 8)
+    const offset = droppableRect.width * 0.18; // Adjust as needed for your layout
+    if (step === 4 || step === 7) x -= offset; // Left tile
+    if (step === 5 || step === 8) x += offset; // Right tile
+
     return { x, y };
   }
 
