@@ -423,7 +423,7 @@ function startStoneThrow(round, callback) {
   // Helper to get X, Y for a given step (1-based)
   function getTilePosition(step) {
     const xOffset = droppableRect.width / 4;
-    const shiftX = 40; // Shift the stone path to the right
+    const shiftX = 30; // Shift the stone path to the right
     let fracY, x;
     if (step === 1) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 - xOffset + shiftX; }
     else if (step === 2) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + xOffset + shiftX; }
