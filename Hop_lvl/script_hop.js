@@ -439,25 +439,24 @@ function startStoneThrow(round, callback) {
 
   // Final position for the stone
   const finalPos = getTilePosition(targetStep);
-  // Position stone at the bottom of the hopscotch tiles (step 1)
-  const startY = droppableRect.top + 7 * tileHeight + tileHeight / 2 + 40; // Start just below tile 1
+  const startPos = getTilePosition(1);
   stone.style.position = 'fixed';
-  stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
-  stone.style.top = startY + 'px';
+  stone.style.left = (startPos.x - 10) + 'px';
+  stone.style.top = (startPos.y - 10) + 'px';
 
-  // Reset any previous animation state
+  
   stone.classList.remove('rolling');
   stone.style.transform = '';
 
-  // Animate stone through the correct path
-  animateStoneThrow(stone, startY, finalPos, targetStep, getTilePosition, () => {
-    showTargetStepMessage(targetStep, tileCount, () => {
+
+  animateStoneThrow(stone, startPos, finalPos, targetStep, getTilePosition, () => {
+    showTargetStepMessage(targetStep, 8, () => {
       callback(targetStep);
     });
   });
 }
 
-function animateStoneThrow(stone, startY, finalPos, targetStep, getTilePosition, callback) {
+function animateStoneThrow(stone, startPos, finalPos, targetStep, getTilePosition, callback) {
   stone.classList.remove('hidden');
   stone.classList.remove('rolling');
 
@@ -476,16 +475,19 @@ function animateStoneThrow(stone, startY, finalPos, targetStep, getTilePosition,
       const pos = path[currentStep];
       const progress = (currentStep + 1) / targetStep;
       const rotation = progress * 720;
+      const dx = pos.x - startPos.x;
+      const dy = pos.y - startPos.y;
       stone.style.transition = `transform ${stepDuration}ms cubic-bezier(0.4,0.7,0.6,1)`;
-      // Move to the center of the actual tile
-      const transformStr = `translateY(${pos.y - startY}px) translateX(${pos.x - (droppableRect.left + droppableRect.width / 2)}px) rotate(${rotation}deg) scale(1)`;
+      const transformStr = `translateX(${dx}px) translateY(${dy}px) rotate(${rotation}deg) scale(1)`;
       stone.style.transform = transformStr;
-      console.log('Step', currentStep + 1, 'transform:', transformStr);
+      console.log('Step', currentStep + 1, 'dx:', dx, 'dy:', dy, 'transform:', transformStr);
       currentStep++;
       setTimeout(animateStep, stepDuration);
     } else {
+      const dx = finalPos.x - startPos.x;
+      const dy = finalPos.y - startPos.y;
       stone.style.transition = `transform 0.3s ease-out`;
-      const finalTransform = `translateY(${finalPos.y - startY}px) translateX(${finalPos.x - (droppableRect.left + droppableRect.width / 2)}px) rotate(720deg) scale(1)`;
+      const finalTransform = `translateX(${dx}px) translateY(${dy}px) rotate(720deg) scale(1)`;
       stone.style.transform = finalTransform;
       console.log('Final transform:', finalTransform);
       setTimeout(callback, 300);
