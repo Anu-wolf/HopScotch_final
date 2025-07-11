@@ -423,16 +423,17 @@ function startStoneThrow(round, callback) {
   // Helper to get X, Y for a given step (1-based)
   function getTilePosition(step) {
     const xOffset = droppableRect.width / 4;
+    const shiftX = 40; // Shift the stone path to the right
     let fracY, x;
-    if (step === 1) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 - xOffset; }
-    else if (step === 2) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + xOffset; }
-    else if (step === 3) { fracY = 6/8; x = droppableRect.left + droppableRect.width/2; }
-    else if (step === 4) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 - xOffset; }
-    else if (step === 5) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 + xOffset; }
-    else if (step === 6) { fracY = 4/8; x = droppableRect.left + droppableRect.width/2; }
-    else if (step === 7) { fracY = 3/8; x = droppableRect.left + droppableRect.width/2 - xOffset; }
-    else if (step === 8) { fracY = 3/8; x = droppableRect.left + droppableRect.width/2 + xOffset; }
-    else { fracY = 7/8; x = droppableRect.left + droppableRect.width/2; }
+    if (step === 1) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 - xOffset + shiftX; }
+    else if (step === 2) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + xOffset + shiftX; }
+    else if (step === 3) { fracY = 6/8; x = droppableRect.left + droppableRect.width/2 + shiftX; }
+    else if (step === 4) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 - xOffset + shiftX; }
+    else if (step === 5) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 + xOffset + shiftX; }
+    else if (step === 6) { fracY = 4/8; x = droppableRect.left + droppableRect.width/2 + shiftX; }
+    else if (step === 7) { fracY = 3/8; x = droppableRect.left + droppableRect.width/2 - xOffset + shiftX; }
+    else if (step === 8) { fracY = 3/8; x = droppableRect.left + droppableRect.width/2 + xOffset + shiftX; }
+    else { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + shiftX; }
     const y = droppableRect.top + droppableRect.height * fracY;
     return { x, y };
   }
