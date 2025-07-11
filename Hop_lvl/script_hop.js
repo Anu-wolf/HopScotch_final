@@ -422,18 +422,26 @@ function startStoneThrow(round, callback) {
 
   // Helper to get X, Y for a given step (1-based)
   function getTilePosition(step) {
-    let row, xOffset;
-    if (step === 1) { row = 7; xOffset = -xSide; }
-    else if (step === 2) { row = 7; xOffset = xSide; }
-    else if (step === 3) { row = 6; xOffset = 0; }
-    else if (step === 4) { row = 5; xOffset = -xSide; }
-    else if (step === 5) { row = 5; xOffset = xSide; }
-    else if (step === 6) { row = 4; xOffset = 0; }
-    else if (step === 7) { row = 3; xOffset = -xSide; }
-    else if (step === 8) { row = 3; xOffset = xSide; }
-    else { row = 7; xOffset = 0; }
-    const y = droppableRect.top + row * tileHeight + tileHeight / 2;
-    const x = droppableRect.left + droppableRect.width / 2 + xOffset;
+    const classNames = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+    const tile = document.querySelector('.' + classNames[step - 1]);
+    if (!tile) {
+      // Fallback: use previous logic if tile not found
+      let row = 7, xOffset = 0;
+      if (step === 1) xOffset = -tileWidth / 4;
+      else if (step === 2) xOffset = tileWidth / 4;
+      else if (step === 3) { row = 6; xOffset = 0; }
+      else if (step === 4) { row = 5; xOffset = -tileWidth / 4; }
+      else if (step === 5) { row = 5; xOffset = tileWidth / 4; }
+      else if (step === 6) { row = 4; xOffset = 0; }
+      else if (step === 7) { row = 3; xOffset = -tileWidth / 4; }
+      else if (step === 8) { row = 3; xOffset = tileWidth / 4; }
+      const y = droppableRect.top + row * tileHeight + tileHeight / 2;
+      const x = droppableRect.left + droppableRect.width / 2 + xOffset;
+      return { x, y };
+    }
+    const rect = tile.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
     return { x, y };
   }
 
@@ -477,15 +485,15 @@ function animateStoneThrow(stone, startY, finalPos, targetStep, getTilePosition,
       const progress = (currentStep + 1) / targetStep;
       const rotation = progress * 720;
       stone.style.transition = `transform ${stepDuration}ms cubic-bezier(0.4,0.7,0.6,1)`;
-      // Only move vertically for now
-      const transformStr = `translateY(${pos.y - startY}px) rotate(${rotation}deg) scale(1)`;
+      // Move to the center of the actual tile
+      const transformStr = `translateY(${pos.y - startY}px) translateX(${pos.x - (droppableRect.left + droppableRect.width / 2)}px) rotate(${rotation}deg) scale(1)`;
       stone.style.transform = transformStr;
       console.log('Step', currentStep + 1, 'transform:', transformStr);
       currentStep++;
       setTimeout(animateStep, stepDuration);
     } else {
       stone.style.transition = `transform 0.3s ease-out`;
-      const finalTransform = `translateY(${finalPos.y - startY}px) rotate(720deg) scale(1)`;
+      const finalTransform = `translateY(${finalPos.y - startY}px) translateX(${finalPos.x - (droppableRect.left + droppableRect.width / 2)}px) rotate(720deg) scale(1)`;
       stone.style.transform = finalTransform;
       console.log('Final transform:', finalTransform);
       setTimeout(callback, 300);
