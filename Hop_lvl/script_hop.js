@@ -416,7 +416,7 @@ function startStoneThrow(round, callback) {
   
   // Calculate tile positions based on the image height
   const imageHeight = droppableRect.height;
-  const tileHeight = imageHeight / actions.length;
+  const tileHeight = imageHeight / 8; // Fixed 8 tiles for hopscotch
   
   // Calculate the final position where stone should land
   // Step 1 is at the bottom, step N is at the top
@@ -426,11 +426,11 @@ function startStoneThrow(round, callback) {
   if (targetStep === 1) {
     // Tile 1: LEFT side at bottom
     finalY = droppableRect.bottom - tileHeight + tileHeight / 2;
-    finalX = -32; // Move left
+    finalX = -40; // Move left - adjusted for better positioning
   } else if (targetStep === 2) {
     // Tile 2: RIGHT side at bottom
     finalY = droppableRect.bottom - tileHeight + tileHeight / 2;
-    finalX = 32; // Move right
+    finalX = 40; // Move right - adjusted for better positioning
   } else if (targetStep === 3) {
     // Tile 3: Centered above tiles 1 and 2
     finalY = droppableRect.bottom - tileHeight * 2 + tileHeight / 2;
@@ -438,11 +438,11 @@ function startStoneThrow(round, callback) {
   } else if (targetStep === 4) {
     // Tile 4: LEFT side above tile 3
     finalY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-    finalX = -32; // Move left
+    finalX = -40; // Move left - adjusted for better positioning
   } else if (targetStep === 5) {
     // Tile 5: RIGHT side above tile 3
     finalY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-    finalX = 32; // Move right
+    finalX = 40; // Move right - adjusted for better positioning
   } else if (targetStep === 6) {
     // Tile 6: Centered above tiles 4 and 5
     finalY = droppableRect.bottom - tileHeight * 4 + tileHeight / 2;
@@ -450,11 +450,11 @@ function startStoneThrow(round, callback) {
   } else if (targetStep === 7) {
     // Tile 7: LEFT side above tile 6
     finalY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-    finalX = -32; // Move left
+    finalX = -40; // Move left - adjusted for better positioning
   } else if (targetStep === 8) {
     // Tile 8: RIGHT side above tile 6
     finalY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-    finalX = 32; // Move right
+    finalX = 40; // Move right - adjusted for better positioning
   }
   
   // Debug: Log the values
@@ -494,7 +494,7 @@ function animateStoneThrow(stone, startY, finalY, finalX, targetStep, totalSteps
   const stepPositions = [];
   const droppableElements = document.querySelector('.droppable-elements');
   const droppableRect = droppableElements.getBoundingClientRect();
-  const tileHeight = droppableRect.height / totalSteps;
+  const tileHeight = droppableRect.height / 8; // Fixed 8 tiles for hopscotch
   
   // Calculate position for each step using the hopscotch layout
   // Step 1 is at the bottom, step N is at the top
@@ -504,11 +504,11 @@ function animateStoneThrow(stone, startY, finalY, finalX, targetStep, totalSteps
     if (i === 1) {
       // Tile 1: LEFT side at bottom
       stepY = droppableRect.bottom - tileHeight + tileHeight / 2;
-      stepX = -32; // Move left
+      stepX = -40; // Move left - adjusted for better positioning
     } else if (i === 2) {
       // Tile 2: RIGHT side at bottom
       stepY = droppableRect.bottom - tileHeight + tileHeight / 2;
-      stepX = 32; // Move right
+      stepX = 40; // Move right - adjusted for better positioning
     } else if (i === 3) {
       // Tile 3: Centered above tiles 1 and 2
       stepY = droppableRect.bottom - tileHeight * 2 + tileHeight / 2;
@@ -516,11 +516,11 @@ function animateStoneThrow(stone, startY, finalY, finalX, targetStep, totalSteps
     } else if (i === 4) {
       // Tile 4: LEFT side above tile 3
       stepY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-      stepX = -32; // Move left
+      stepX = -40; // Move left - adjusted for better positioning
     } else if (i === 5) {
       // Tile 5: RIGHT side above tile 3
       stepY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-      stepX = 32; // Move right
+      stepX = 40; // Move right - adjusted for better positioning
     } else if (i === 6) {
       // Tile 6: Centered above tiles 4 and 5
       stepY = droppableRect.bottom - tileHeight * 4 + tileHeight / 2;
@@ -528,11 +528,11 @@ function animateStoneThrow(stone, startY, finalY, finalX, targetStep, totalSteps
     } else if (i === 7) {
       // Tile 7: LEFT side above tile 6
       stepY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-      stepX = -32; // Move left
+      stepX = -40; // Move left - adjusted for better positioning
     } else if (i === 8) {
       // Tile 8: RIGHT side above tile 6
       stepY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-      stepX = 32; // Move right
+      stepX = 40; // Move right - adjusted for better positioning
     }
     
     stepPositions.push({ y: stepY, x: stepX });
@@ -550,7 +550,7 @@ function animateStoneThrow(stone, startY, finalY, finalX, targetStep, totalSteps
   
   // Create animation that goes through each step up to target step ONLY
   let currentStep = 0;
-  const animationDuration = 1500; // 1.5 seconds total
+  const animationDuration = 3000; // 3 seconds total - slower for better visibility
   const stepDuration = animationDuration / targetStep;
   
   const animateStep = () => {
