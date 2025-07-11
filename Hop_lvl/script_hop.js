@@ -422,26 +422,18 @@ function startStoneThrow(round, callback) {
 
   // Helper to get X, Y for a given step (1-based)
   function getTilePosition(step) {
-    const classNames = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
-    const tile = document.querySelector('.' + classNames[step - 1]);
-    if (!tile) {
-      // Fallback: use previous logic if tile not found
-      let row = 7, xOffset = 0;
-      if (step === 1) xOffset = -tileWidth / 4;
-      else if (step === 2) xOffset = tileWidth / 4;
-      else if (step === 3) { row = 6; xOffset = 0; }
-      else if (step === 4) { row = 5; xOffset = -tileWidth / 4; }
-      else if (step === 5) { row = 5; xOffset = tileWidth / 4; }
-      else if (step === 6) { row = 4; xOffset = 0; }
-      else if (step === 7) { row = 3; xOffset = -tileWidth / 4; }
-      else if (step === 8) { row = 3; xOffset = tileWidth / 4; }
-      const y = droppableRect.top + row * tileHeight + tileHeight / 2;
-      const x = droppableRect.left + droppableRect.width / 2 + xOffset;
-      return { x, y };
-    }
-    const rect = tile.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    const xOffset = droppableRect.width / 4;
+    let fracY, x;
+    if (step === 1) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 - xOffset; }
+    else if (step === 2) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + xOffset; }
+    else if (step === 3) { fracY = 6/8; x = droppableRect.left + droppableRect.width/2; }
+    else if (step === 4) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 - xOffset; }
+    else if (step === 5) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 + xOffset; }
+    else if (step === 6) { fracY = 4/8; x = droppableRect.left + droppableRect.width/2; }
+    else if (step === 7) { fracY = 3/8; x = droppableRect.left + droppableRect.width/2 - xOffset; }
+    else if (step === 8) { fracY = 3/8; x = droppableRect.left + droppableRect.width/2 + xOffset; }
+    else { fracY = 7/8; x = droppableRect.left + droppableRect.width/2; }
+    const y = droppableRect.top + droppableRect.height * fracY;
     return { x, y };
   }
 
