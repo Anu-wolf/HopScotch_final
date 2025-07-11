@@ -411,15 +411,15 @@ function startStoneThrow(round, callback) {
   // Randomly select which step the stone will land on (2 to total steps - never tile 1)
   const targetStep = Math.floor(Math.random() * (actions.length - 1)) + 2;
   
-  // Get the position of the hopscotch image
+
   const droppableRect = droppableElements.getBoundingClientRect();
   
-  // Calculate tile positions based on the container
+  
   const tileCount = 8;
   // Helper to get X, Y for a given step (1-based, bottom to top)
   function getTilePosition(step) {
-    // step: 1 (bottom) to 8 (top)
-    const fracY = 1 - (step - 1) / (tileCount - 1); // 1 for bottom, 0 for top
+    
+    const fracY = 1 - (step - 0.5) / tileCount; // Center of each tile
     const y = droppableRect.top + droppableRect.height * fracY;
     const x = droppableRect.left + droppableRect.width / 2; // Centered horizontally
     return { x, y };
