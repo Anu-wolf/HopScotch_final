@@ -417,19 +417,20 @@ function startStoneThrow(round, callback) {
   // Calculate tile positions based on the container
   const tileCount = 8;
   const tileHeight = droppableRect.height / tileCount;
-  const tileWidth = droppableRect.width / 2; // Each row is two tiles wide
+  const tileWidth = droppableRect.width / 2;
+  const xSide = tileWidth / 4; // Smaller X offset for side tiles
 
   // Helper to get X, Y for a given step (1-based)
   function getTilePosition(step) {
     let row, xOffset;
-    if (step === 1) { row = 7; xOffset = -tileWidth / 2; }
-    else if (step === 2) { row = 7; xOffset = tileWidth / 2; }
+    if (step === 1) { row = 7; xOffset = -xSide; }
+    else if (step === 2) { row = 7; xOffset = xSide; }
     else if (step === 3) { row = 6; xOffset = 0; }
-    else if (step === 4) { row = 5; xOffset = -tileWidth / 2; }
-    else if (step === 5) { row = 5; xOffset = tileWidth / 2; }
+    else if (step === 4) { row = 5; xOffset = -xSide; }
+    else if (step === 5) { row = 5; xOffset = xSide; }
     else if (step === 6) { row = 4; xOffset = 0; }
-    else if (step === 7) { row = 3; xOffset = -tileWidth / 2; }
-    else if (step === 8) { row = 3; xOffset = tileWidth / 2; }
+    else if (step === 7) { row = 3; xOffset = -xSide; }
+    else if (step === 8) { row = 3; xOffset = xSide; }
     else { row = 7; xOffset = 0; }
     const y = droppableRect.top + row * tileHeight + tileHeight / 2;
     const x = droppableRect.left + droppableRect.width / 2 + xOffset;
@@ -476,12 +477,12 @@ function animateStoneThrow(stone, startY, finalPos, targetStep, getTilePosition,
       const progress = (currentStep + 1) / targetStep;
       const rotation = progress * 720;
       stone.style.transition = `transform ${stepDuration}ms cubic-bezier(0.4,0.7,0.6,1)`;
-      stone.style.transform = `translateY(${pos.y - startY}px) translateX(${pos.x - (window.innerWidth/2)}px) rotate(${rotation}deg) scale(1)`;
+      stone.style.transform = `translateY(${pos.y - startY}px) translateX(${pos.x - (droppableRect.left + droppableRect.width / 2)}px) rotate(${rotation}deg) scale(1)`;
       currentStep++;
       setTimeout(animateStep, stepDuration);
     } else {
       stone.style.transition = `transform 0.3s ease-out`;
-      stone.style.transform = `translateY(${finalPos.y - startY}px) translateX(${finalPos.x - (window.innerWidth/2)}px) rotate(720deg) scale(1)`;
+      stone.style.transform = `translateY(${finalPos.y - startY}px) translateX(${finalPos.x - (droppableRect.left + droppableRect.width / 2)}px) rotate(720deg) scale(1)`;
       setTimeout(callback, 300);
     }
   };
