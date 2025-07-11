@@ -416,25 +416,12 @@ function startStoneThrow(round, callback) {
   
   // Calculate tile positions based on the container
   const tileCount = 8;
-  const tileHeight = droppableRect.height / tileCount;
-  const tileWidth = droppableRect.width / 2;
-  const xSide = tileWidth / 4; // Smaller X offset for side tiles
-
-  // Helper to get X, Y for a given step (1-based)
+  // Helper to get X, Y for a given step (1-based, bottom to top)
   function getTilePosition(step) {
-    const xOffset = droppableRect.width / 4;
-    const shiftX = 30; // Shift the stone path to the right
-    let fracY, x;
-    if (step === 1) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 - xOffset + shiftX; }
-    else if (step === 2) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + xOffset + shiftX; }
-    else if (step === 3) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + shiftX; }
-    else if (step === 4) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 - xOffset + shiftX; }
-    else if (step === 5) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 + xOffset + shiftX; }
-    else if (step === 6) { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + shiftX; }
-    else if (step === 7) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 - xOffset + shiftX; }
-    else if (step === 8) { fracY = 5/8; x = droppableRect.left + droppableRect.width/2 + xOffset + shiftX; }
-    else { fracY = 7/8; x = droppableRect.left + droppableRect.width/2 + shiftX; }
+    // step: 1 (bottom) to 8 (top)
+    const fracY = 1 - (step - 1) / (tileCount - 1); // 1 for bottom, 0 for top
     const y = droppableRect.top + droppableRect.height * fracY;
+    const x = droppableRect.left + droppableRect.width / 2; // Centered horizontally
     return { x, y };
   }
 
@@ -445,10 +432,8 @@ function startStoneThrow(round, callback) {
   stone.style.left = (startPos.x - 10) + 'px';
   stone.style.top = (startPos.y - 10) + 'px';
 
-  
   stone.classList.remove('rolling');
   stone.style.transform = '';
-
 
   animateStoneThrow(stone, startPos, finalPos, targetStep, getTilePosition, () => {
     showTargetStepMessage(targetStep, 8, () => {
@@ -481,7 +466,6 @@ function animateStoneThrow(stone, startPos, finalPos, targetStep, getTilePositio
       stone.style.transition = `transform ${stepDuration}ms cubic-bezier(0.4,0.7,0.6,1)`;
       const transformStr = `translateX(${dx}px) translateY(${dy}px) rotate(${rotation}deg) scale(1)`;
       stone.style.transform = transformStr;
-      console.log('Step', currentStep + 1, 'dx:', dx, 'dy:', dy, 'transform:', transformStr);
       currentStep++;
       setTimeout(animateStep, stepDuration);
     } else {
@@ -490,8 +474,15 @@ function animateStoneThrow(stone, startPos, finalPos, targetStep, getTilePositio
       stone.style.transition = `transform 0.3s ease-out`;
       const finalTransform = `translateX(${dx}px) translateY(${dy}px) rotate(720deg) scale(1)`;
       stone.style.transform = finalTransform;
-      console.log('Final transform:', finalTransform);
-      setTimeout(callback, 300);
+      // Add bounce effect
+      setTimeout(() => {
+        stone.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)';
+        stone.style.transform = finalTransform.replace('scale(1)', 'scale(1.15)');
+        setTimeout(() => {
+          stone.style.transform = finalTransform;
+          setTimeout(callback, 200);
+        }, 150);
+      }, 300);
     }
   };
   setTimeout(animateStep, 100);
