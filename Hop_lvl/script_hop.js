@@ -419,7 +419,7 @@ function startStoneThrow(round, callback) {
   // Helper to get X, Y for a given step (1-based, bottom to top)
   function getTilePosition(step) {
     
-    const fracY = 1 - (step + 2.5) / tileCount; // Center of each tile
+    const fracY = 1 - (step + 0.5) / tileCount; // Center of each tile
     const y = droppableRect.top + droppableRect.height * fracY;
     const x = droppableRect.left + droppableRect.width / 2; // Centered horizontally
     return { x, y };
