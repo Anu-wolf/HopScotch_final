@@ -427,6 +427,11 @@ function startStoneThrow(round, callback) {
     if (step === 4 || step === 7) x -= offset; // Left tile
     if (step === 5 || step === 8) x += offset; // Right tile
 
+    // Raise only tile 4 by 0.4 units
+    if (step === 4 || step === 5|| step === 7 || step === 8) {
+      y -= droppableRect.height * 0.3;
+    }
+
     return { x, y };
   }
 
