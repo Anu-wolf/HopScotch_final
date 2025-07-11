@@ -414,166 +414,77 @@ function startStoneThrow(round, callback) {
   // Get the position of the hopscotch image
   const droppableRect = droppableElements.getBoundingClientRect();
   
-  // Calculate tile positions based on the image height
-  const imageHeight = droppableRect.height;
-  const tileHeight = imageHeight / 8; // Fixed 8 tiles for hopscotch
-  
-  // Calculate the final position where stone should land
-  // Step 1 is at the bottom, step N is at the top
-  // Handle special layout: tiles 4 and 5 are on left and right sides
-  let finalY, finalX = 0;
-  
-  if (targetStep === 1) {
-    // Tile 1: LEFT side at bottom
-    finalY = droppableRect.bottom - tileHeight + tileHeight / 2;
-    finalX = -40; // Move left - adjusted for better positioning
-  } else if (targetStep === 2) {
-    // Tile 2: RIGHT side at bottom
-    finalY = droppableRect.bottom - tileHeight + tileHeight / 2;
-    finalX = 40; // Move right - adjusted for better positioning
-  } else if (targetStep === 3) {
-    // Tile 3: Centered above tiles 1 and 2
-    finalY = droppableRect.bottom - tileHeight * 2 + tileHeight / 2;
-    finalX = 0; // Centered
-  } else if (targetStep === 4) {
-    // Tile 4: LEFT side above tile 3
-    finalY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-    finalX = -40; // Move left - adjusted for better positioning
-  } else if (targetStep === 5) {
-    // Tile 5: RIGHT side above tile 3
-    finalY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-    finalX = 40; // Move right - adjusted for better positioning
-  } else if (targetStep === 6) {
-    // Tile 6: Centered above tiles 4 and 5
-    finalY = droppableRect.bottom - tileHeight * 4 + tileHeight / 2;
-    finalX = 0; // Centered
-  } else if (targetStep === 7) {
-    // Tile 7: LEFT side above tile 6
-    finalY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-    finalX = -40; // Move left - adjusted for better positioning
-  } else if (targetStep === 8) {
-    // Tile 8: RIGHT side above tile 6
-    finalY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-    finalX = 40; // Move right - adjusted for better positioning
+  // Calculate tile positions based on the container
+  const tileCount = 8;
+  const tileHeight = droppableRect.height / tileCount;
+  const tileWidth = droppableRect.width / 2; // Each row is two tiles wide
+
+  // Helper to get X, Y for a given step (1-based)
+  function getTilePosition(step) {
+    let row, xOffset;
+    if (step === 1) { row = 7; xOffset = -tileWidth / 2; }
+    else if (step === 2) { row = 7; xOffset = tileWidth / 2; }
+    else if (step === 3) { row = 6; xOffset = 0; }
+    else if (step === 4) { row = 5; xOffset = -tileWidth / 2; }
+    else if (step === 5) { row = 5; xOffset = tileWidth / 2; }
+    else if (step === 6) { row = 4; xOffset = 0; }
+    else if (step === 7) { row = 3; xOffset = -tileWidth / 2; }
+    else if (step === 8) { row = 3; xOffset = tileWidth / 2; }
+    else { row = 7; xOffset = 0; }
+    const y = droppableRect.top + row * tileHeight + tileHeight / 2;
+    const x = droppableRect.left + droppableRect.width / 2 + xOffset;
+    return { x, y };
   }
-  
-  // Debug: Log the values
-  console.log('Target step:', targetStep);
-  console.log('Total actions:', actions.length);
-  console.log('Tile height:', tileHeight);
-  console.log('Final Y position:', finalY);
-  
+
+  // Final position for the stone
+  const finalPos = getTilePosition(targetStep);
   // Position stone at the bottom of the hopscotch tiles (step 1)
-  const startY = droppableRect.bottom + 20;
+  const startY = droppableRect.top + 7 * tileHeight + tileHeight / 2 + 40; // Start just below tile 1
   stone.style.position = 'fixed';
   stone.style.left = (droppableRect.left + droppableRect.width / 2 - 10) + 'px';
   stone.style.top = startY + 'px';
-  
+
   // Reset any previous animation state
   stone.classList.remove('rolling');
   stone.style.transform = '';
-  
-  // Create a realistic stone throw animation that goes through each step once
-  animateStoneThrow(stone, startY, finalY, finalX, targetStep, actions.length, () => {
-    // Show message about target step
-    showTargetStepMessage(targetStep, actions.length, () => {
-      // Don't hide the stone - keep it visible permanently
+
+  // Animate stone through the correct path
+  animateStoneThrow(stone, startY, finalPos, targetStep, getTilePosition, () => {
+    showTargetStepMessage(targetStep, tileCount, () => {
       callback(targetStep);
     });
   });
 }
 
-function animateStoneThrow(stone, startY, finalY, finalX, targetStep, totalSteps, callback) {
-  // Show stone
+function animateStoneThrow(stone, startY, finalPos, targetStep, getTilePosition, callback) {
   stone.classList.remove('hidden');
-  
-  // Remove any CSS animation classes that might interfere
   stone.classList.remove('rolling');
-  
-  // Calculate step positions
-  const stepPositions = [];
-  const droppableElements = document.querySelector('.droppable-elements');
-  const droppableRect = droppableElements.getBoundingClientRect();
-  const tileHeight = droppableRect.height / 8; // Fixed 8 tiles for hopscotch
-  
-  // Calculate position for each step using the hopscotch layout
-  // Step 1 is at the bottom, step N is at the top
+
+  // Build the path
+  const path = [];
   for (let i = 1; i <= targetStep; i++) {
-    let stepY, stepX = 0;
-    
-    if (i === 1) {
-      // Tile 1: LEFT side at bottom
-      stepY = droppableRect.bottom - tileHeight + tileHeight / 2;
-      stepX = -40; // Move left - adjusted for better positioning
-    } else if (i === 2) {
-      // Tile 2: RIGHT side at bottom
-      stepY = droppableRect.bottom - tileHeight + tileHeight / 2;
-      stepX = 40; // Move right - adjusted for better positioning
-    } else if (i === 3) {
-      // Tile 3: Centered above tiles 1 and 2
-      stepY = droppableRect.bottom - tileHeight * 2 + tileHeight / 2;
-      stepX = 0; // Centered
-    } else if (i === 4) {
-      // Tile 4: LEFT side above tile 3
-      stepY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-      stepX = -40; // Move left - adjusted for better positioning
-    } else if (i === 5) {
-      // Tile 5: RIGHT side above tile 3
-      stepY = droppableRect.bottom - tileHeight * 3 + tileHeight / 2;
-      stepX = 40; // Move right - adjusted for better positioning
-    } else if (i === 6) {
-      // Tile 6: Centered above tiles 4 and 5
-      stepY = droppableRect.bottom - tileHeight * 4 + tileHeight / 2;
-      stepX = 0; // Centered
-    } else if (i === 7) {
-      // Tile 7: LEFT side above tile 6
-      stepY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-      stepX = -40; // Move left - adjusted for better positioning
-    } else if (i === 8) {
-      // Tile 8: RIGHT side above tile 6
-      stepY = droppableRect.bottom - tileHeight * 5 + tileHeight / 2;
-      stepX = 40; // Move right - adjusted for better positioning
-    }
-    
-    stepPositions.push({ y: stepY, x: stepX });
+    path.push(getTilePosition(i));
   }
-  
-  // Ensure the final position matches the last step position
-  const lastStepPosition = stepPositions[stepPositions.length - 1];
-  console.log('Last step position:', lastStepPosition);
-  console.log('Final Y:', finalY);
-  
-  // Debug: Log step positions
-  console.log('Step positions:', stepPositions);
-  console.log('Target step:', targetStep);
-  console.log('Final Y:', finalY);
-  
-  // Create animation that goes through each step up to target step ONLY
+
   let currentStep = 0;
-  const animationDuration = 3000; // 3 seconds total - slower for better visibility
+  const animationDuration = 3000;
   const stepDuration = animationDuration / targetStep;
-  
+
   const animateStep = () => {
     if (currentStep < targetStep) {
-      const targetPos = stepPositions[currentStep];
+      const pos = path[currentStep];
       const progress = (currentStep + 1) / targetStep;
-      const rotation = progress * 720; // Total rotation over the animation
-      
-      // Use CSS transition for smooth movement
-      stone.style.transition = `transform ${stepDuration}ms ease-in-out`;
-      stone.style.transform = `translateY(${targetPos.y - startY}px) translateX(${targetPos.x}px) rotate(${rotation}deg) scale(1)`;
-      
+      const rotation = progress * 720;
+      stone.style.transition = `transform ${stepDuration}ms cubic-bezier(0.4,0.7,0.6,1)`;
+      stone.style.transform = `translateY(${pos.y - startY}px) translateX(${pos.x - (window.innerWidth/2)}px) rotate(${rotation}deg) scale(1)`;
       currentStep++;
       setTimeout(animateStep, stepDuration);
     } else {
-      // Animation complete - stone stays at final position
       stone.style.transition = `transform 0.3s ease-out`;
-      stone.style.transform = `translateY(${finalY - startY}px) translateX(${finalX}px) rotate(720deg) scale(1)`;
+      stone.style.transform = `translateY(${finalPos.y - startY}px) translateX(${finalPos.x - (window.innerWidth/2)}px) rotate(720deg) scale(1)`;
       setTimeout(callback, 300);
     }
   };
-  
-  // Start animation
   setTimeout(animateStep, 100);
 }
 
