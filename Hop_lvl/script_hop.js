@@ -75,19 +75,12 @@ class HopscotchGame {
   }
 
   isOrderCorrect(currentOrder) {
-    // Check if the order is correct up to the target step
-    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
-    // Allow player to place more tiles than target, but check only up to target
-    if (currentOrder.length < targetLength) return false;
-    
-    // Special case: If target step is 2, only "Skip" is correct
-    if (this.targetStep === 2) {
-      return currentOrder.length === 1 && currentOrder[0] === 'Skip';
-    }
-    
-    // Normal case: Check against the sequence
-    for (let i = 0; i < targetLength; i++) {
-      if (currentOrder[i] !== this.availableButtons[i]) return false;
+    // Use the targetStep as the tile number
+    const validSeq = validSequencesForTile[this.targetStep];
+    if (!validSeq) return false;
+    if (currentOrder.length !== validSeq.length) return false;
+    for (let i = 0; i < validSeq.length; i++) {
+      if (currentOrder[i] !== validSeq[i]) return false;
     }
     return true;
   }
@@ -362,6 +355,16 @@ const levelSequences = {
   8: ['Hop', 'Hop', 'Hop', 'Jump', 'Hop', 'Skip-HopLeft'],
 };
 
+const validSequencesForTile = {
+  2: ['Skip'],
+  3: ['Skip', 'Hop'],
+  4: ['Skip', 'Hop', 'Jump'],
+  5: ['Skip', 'Hop', 'Jump'],
+  6: ['Skip', 'Hop', 'Jump', 'Hop'],
+  7: ['Skip', 'Hop', 'Jump', 'Hop', 'Jump'],
+  8: ['Skip', 'Hop', 'Jump', 'Hop', 'Jump'],
+};
+
 let game;
 
 function initializeGame(round) {
@@ -406,10 +409,8 @@ function initializeGame(round) {
 function startStoneThrow(round, callback) {
   const stone = document.getElementById('stone');
   const droppableElements = document.querySelector('.droppable-elements');
-  const actions = levelSequences[round];
-  
-  // Randomly select which step the stone will land on (2 to total steps - never tile 1)
-  const targetStep = Math.floor(Math.random() * (actions.length - 1)) + 2;
+  // Always randomize from 2 to 8
+  const targetStep = Math.floor(Math.random() * 7) + 2; // 2 to 8 inclusive
   
 
   const droppableRect = droppableElements.getBoundingClientRect();
