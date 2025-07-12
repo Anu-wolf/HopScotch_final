@@ -737,9 +737,12 @@ canvas.confetti-canvas {
   left: 0;
   z-index: 1000;
   box-shadow: 
+    0 0 0 4px #fff, /* bright white border */
+    0 0 12px 4px #ffe066, /* yellow glow */
     inset 2px 2px 6px rgba(0, 0, 0, 0.7),
     inset -2px -2px 8px rgba(0, 0, 0, 0.8),
     0 2px 8px rgba(0, 0, 0, 0.7);
+  border: 2.5px solid #fff;
   transition: all 0.3s ease;
   pointer-events: none;
 }
