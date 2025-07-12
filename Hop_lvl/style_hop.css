@@ -730,16 +730,16 @@ canvas.confetti-canvas {
 .stone {
   width: 20px;
   height: 20px;
-  background: radial-gradient(circle at 30% 30%, #8b8b8b, #5a5a5a);
+  background: radial-gradient(circle at 30% 30%, #444, #222 90%);
   border-radius: 50%;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 1000;
   box-shadow: 
-    inset 2px 2px 4px rgba(255, 255, 255, 0.3),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.3),
-    0 2px 4px rgba(0, 0, 0, 0.4);
+    inset 2px 2px 6px rgba(0, 0, 0, 0.7),
+    inset -2px -2px 8px rgba(0, 0, 0, 0.8),
+    0 2px 8px rgba(0, 0, 0, 0.7);
   transition: all 0.3s ease;
   pointer-events: none;
 }

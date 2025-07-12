@@ -484,15 +484,20 @@ function animateStoneThrow(stone, startPos, finalPos, targetStep, getTilePositio
       stone.style.transition = `transform 0.3s ease-out`;
       const finalTransform = `translateX(${dx}px) translateY(${dy}px) rotate(720deg) scale(1)`;
       stone.style.transform = finalTransform;
-      // Add bounce effect
+      // BOUNCE
       setTimeout(() => {
-        stone.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1)';
-        stone.style.transform = finalTransform.replace('scale(1)', 'scale(1.15)');
+        stone.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+        stone.style.transform = finalTransform.replace('scale(1)', 'scale(1.35)');
         setTimeout(() => {
-          stone.style.transform = finalTransform;
-          setTimeout(callback, 200);
-        }, 150);
-      }, 300);
+          stone.style.transition = 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1)';
+          stone.style.transform = finalTransform.replace('scale(1)', 'scale(0.92)');
+          setTimeout(() => {
+            stone.style.transition = 'transform 0.18s cubic-bezier(0.34,1.56,0.64,1)';
+            stone.style.transform = finalTransform;
+            setTimeout(callback, 200);
+          }, 120);
+        }, 200);
+      }, 350);
     }
   };
   setTimeout(animateStep, 100);
