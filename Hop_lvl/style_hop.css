@@ -737,14 +737,27 @@ canvas.confetti-canvas {
   left: 0;
   z-index: 1000;
   box-shadow: 
-    0 0 0 4px #fff, /* bright white border */
-    0 0 12px 4px #ffe066, /* yellow glow */
     inset 2px 2px 6px rgba(0, 0, 0, 0.7),
     inset -2px -2px 8px rgba(0, 0, 0, 0.8),
     0 2px 8px rgba(0, 0, 0, 0.7);
-  border: 2.5px solid #fff;
+  border: none;
   transition: all 0.3s ease;
   pointer-events: none;
+  position: absolute;
+  overflow: visible;
+}
+.stone::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  width: 8px;
+  height: 5px;
+  background: linear-gradient(120deg, rgba(255,255,255,0.7) 60%, rgba(255,255,255,0.1) 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(0.2px);
 }
 
 
