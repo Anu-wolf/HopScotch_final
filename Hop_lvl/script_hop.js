@@ -45,23 +45,13 @@ class HopscotchGame {
     const buttonId = event.dataTransfer.getData('text/plain');
     const draggedButton = document.getElementById(buttonId);
     if (draggedButton) {
-      // Check if we've already reached the target step
+      // Check if we've already reached the required number of steps
       const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
-      const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+      const stepsRequired = stepsRequiredForTile[this.targetStep];
       
-      if (currentOrder.length >= targetLength) {
+      if (currentOrder.length >= stepsRequired) {
         // Don't allow more tiles to be placed
         return;
-      }
-      
-      // Special case: If target step is 2, only allow "Skip" as first action
-      if (this.targetStep === 2 && currentOrder.length === 0) {
-        const action = draggedButton.dataset.action;
-        if (action !== 'Skip') {
-          // Show error message for wrong action
-          this.showWrongMessage();
-          return;
-        }
       }
       
       const wrapper = draggedButton.parentElement;
@@ -87,18 +77,13 @@ class HopscotchGame {
 
   checkWrongTile() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
+    const stepsRequired = stepsRequiredForTile[this.targetStep];
     
-    // Special case: If target step is 2, only "Skip" is correct
-    if (this.targetStep === 2) {
-      if (currentOrder.length > 0 && currentOrder[0] !== 'Skip') {
-        this.showWrongMessage();
-        return;
-      }
-    } else {
-      // Normal case: Check each position up to the target step to see if the tile is wrong
-      const targetLength = Math.min(this.targetStep, this.availableButtons.length);
-      for (let i = 0; i < Math.min(currentOrder.length, targetLength); i++) {
-        if (currentOrder[i] !== this.availableButtons[i]) {
+    // Check if the current order matches the required sequence for this tile
+    const validSeq = validSequencesForTile[this.targetStep];
+    if (validSeq) {
+      for (let i = 0; i < Math.min(currentOrder.length, validSeq.length); i++) {
+        if (currentOrder[i] !== validSeq[i]) {
           // Wrong tile detected - show popup
           this.showWrongMessage();
           return;
@@ -106,9 +91,8 @@ class HopscotchGame {
       }
     }
     
-    // If we've reached the target step, disable remaining buttons
-    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
-    if (currentOrder.length >= targetLength) {
+    // If we've reached the required number of steps, disable remaining buttons
+    if (currentOrder.length >= stepsRequired) {
       this.disableRemainingButtons();
     }
   }
@@ -301,11 +285,11 @@ class HopscotchGame {
 
   checkSequence() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
-    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+    const stepsRequired = stepsRequiredForTile[this.targetStep];
     
-    // Only check if we have the correct number of tiles for target step
-    if (currentOrder.length !== targetLength) {
-      alert(`You need to place exactly ${targetLength} tiles to match the stone landing position!`);
+    // Only check if we have the correct number of tiles for the target tile
+    if (currentOrder.length !== stepsRequired) {
+      alert(`You need to place exactly ${stepsRequired} tiles to reach tile ${this.targetStep}!`);
       return;
     }
     
@@ -315,19 +299,17 @@ class HopscotchGame {
       } else {
         alert('The order is not right or it is incomplete. Check the animation & use the reset button to try again !!');
       }
-      this.character.style.transform = `translateY(0px) translateX(0px)`;
-      this.xPosition = 0;
-      this.yPosition = 0;
+      this.character.style.transform = `translateX(0px) translateY(0px)`;
     });
   }
 
   runSequence() {
     const currentOrder = Array.from(this.destinationContainer.children).map(wrapper => wrapper.querySelector('button')?.dataset.action);
-    const targetLength = Math.min(this.targetStep, this.availableButtons.length);
+    const stepsRequired = stepsRequiredForTile[this.targetStep];
     
-    // Only run if we have the correct number of tiles for target step
-    if (currentOrder.length !== targetLength) {
-      alert(`You need to place exactly ${targetLength} tiles to match the stone landing position!`);
+    // Only run if we have the correct number of tiles for the target tile
+    if (currentOrder.length !== stepsRequired) {
+      alert(`You need to place exactly ${stepsRequired} tiles to reach tile ${this.targetStep}!`);
       return;
     }
     
@@ -335,7 +317,8 @@ class HopscotchGame {
       if (this.isOrderCorrect(currentOrder)) {
         showCorrectMessage();
       }
-      // Removed the alert popup - now only the correct message shows
+      // Reset character position after animation
+      this.character.style.transform = `translateX(0px) translateY(0px)`;
     });
   }
 
@@ -363,6 +346,17 @@ const validSequencesForTile = {
   6: ['Skip', 'Hop', 'Jump', 'Hop'],
   7: ['Skip', 'Hop', 'Jump', 'Hop', 'Jump'],
   8: ['Skip', 'Hop', 'Jump', 'Hop', 'Jump'],
+};
+
+// Mapping from tile number to number of steps required
+const stepsRequiredForTile = {
+  2: 1,  // Tile 2 needs 1 step: ['Skip']
+  3: 2,  // Tile 3 needs 2 steps: ['Skip', 'Hop']
+  4: 3,  // Tile 4 needs 3 steps: ['Skip', 'Hop', 'Jump']
+  5: 3,  // Tile 5 needs 3 steps: ['Skip', 'Hop', 'Jump']
+  6: 4,  // Tile 6 needs 4 steps: ['Skip', 'Hop', 'Jump', 'Hop']
+  7: 5,  // Tile 7 needs 5 steps: ['Skip', 'Hop', 'Jump', 'Hop', 'Jump']
+  8: 5,  // Tile 8 needs 5 steps: ['Skip', 'Hop', 'Jump', 'Hop', 'Jump']
 };
 
 let game;
